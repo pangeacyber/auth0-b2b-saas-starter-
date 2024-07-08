@@ -22,16 +22,16 @@ const sidebarNavItems = [
     href: "/pangea/services",
   },
   {
-    title: "PII & Sensitive data Redaction",
-    href: "/pangea/redact",
-  },
-  {
     title: "Secure Audit Log",
     href: "/pangea/secure-audit-log",
   },
   {
-    title: "Secure File Share",
+    title: "Secure Share",
     href: "/pangea/secure-file-share",
+  },
+  {
+    title: "Redact",
+    href: "/pangea/redact",
   },
   /*
   {
