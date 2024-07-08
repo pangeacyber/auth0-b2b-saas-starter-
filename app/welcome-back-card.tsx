@@ -20,7 +20,7 @@ export function WelcomeBackCard() {
         </Button>
       </div>
       <div className="flex justify-center">
-        <Button className="bg-purple-900" asChild>
+        <Button className="dark:text-white bg-purple-900" asChild>
           <Link href="/pangea/services">
            <ArrowLeftIcon className="mr-1.5 size-4" />
             Explore Pangea Services
