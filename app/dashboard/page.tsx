@@ -34,7 +34,7 @@ export default async function DashboardHome() {
           </p>
           <div className="mt-3">
             <Link href="/pangea/services" className="w-full">
-              <Button className="w-full bg-purple-800">
+              <Button className="w-full dark:text-white bg-purple-800">
                 <ArrowLeftIcon className="mr-2 size-4" />
                 See Pangea Services
               </Button>

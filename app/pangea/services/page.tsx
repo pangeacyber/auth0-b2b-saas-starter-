@@ -23,7 +23,7 @@ export default async function PangeaDemo() {
         </p>
         <div className="mt-3">
           <Link href="https://pangea.cloud">
-            <Button className="bg-purple-800">
+            <Button className="dark:text-white bg-purple-800">
               Sign up for a Pangea account
             </Button>
           </Link>
@@ -167,7 +167,7 @@ function ServiceEntry(props: ServiceEntryProps) {
         <p className="mt-2 text-muted-foreground">{props.description}</p>
         <div className="mt-3">
           <Link href={props.settingsLink} className="">
-            <Button className="bg-purple-800">Configure {props.name}</Button>
+            <Button className="dark:text-white bg-purple-800">Configure {props.name}</Button>
           </Link>
           <Link href={props.documentationLink} className="pl-2">
             <Button variant="secondary">Documentation</Button>
