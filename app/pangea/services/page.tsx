@@ -115,6 +115,7 @@ export default async function PangeaDemo() {
         documentationLink="https://pangea.cloud/docs/redact"
         tickleLink="https://pangea.cloud/docs/api/redact/"
       />
+      {/*
       <ServiceEntry
         name="Sanitize"
         description="
@@ -140,6 +141,7 @@ export default async function PangeaDemo() {
         documentationLink="https://pangea.cloud/docs/sanitize"
         tickleLink="https://pangea.cloud/docs/api/sanitize/"
       />
+     */}
     </div>
   )
 }
