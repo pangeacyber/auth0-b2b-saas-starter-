@@ -1,5 +1,5 @@
 import Link from "next/link"
-import { ArrowRightIcon } from "@radix-ui/react-icons"
+import { ArrowRightIcon, ArrowLeftIcon } from "@radix-ui/react-icons"
 
 import { Button } from "@/components/ui/button"
 
@@ -31,6 +31,17 @@ export default async function DashboardHome() {
           <p className="mt-3 text-muted-foreground">
             (You must be logged in with an &quot;admin&quot; role in your
             organization.)
+          </p>
+          <div className="mt-3">
+            <Link href="/pangea" className="w-full">
+              <Button className="w-full bg-purple-800">
+                <ArrowLeftIcon className="mr-2 size-4" />
+                See Pangea Services
+              </Button>
+            </Link>
+          </div>
+          <p className="mt-3 text-muted-foreground">
+            Pangea Services are a great starting point for a secure by design app.
           </p>
         </div>
       </div>

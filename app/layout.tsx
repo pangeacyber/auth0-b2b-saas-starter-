@@ -23,6 +23,14 @@ export default async function RootLayout({
 }>) {
   return (
     <html lang="en" className={inter.className} suppressHydrationWarning>
+      <head>
+          <link rel="preconnect" href="https://fonts.googleapis.com" />
+          <link rel="preconnect" href="https://fonts.gstatic.com"/>
+          <script src="/vendor/audit-log-viewer.js"></script>
+          <script src="/vendor/store-file-viewer.js"></script>
+          <script src="/vendor/init.js"></script>
+
+      </head>
       <body className="min-h-screen bg-background font-sans antialiased">
         <ThemeProvider
           attribute="class"

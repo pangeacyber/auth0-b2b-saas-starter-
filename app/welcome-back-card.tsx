@@ -1,5 +1,5 @@
 import Link from "next/link"
-import { ArrowRightIcon } from "lucide-react"
+import { ArrowRightIcon, ArrowLeftIcon } from "lucide-react"
 
 import { Button } from "@/components/ui/button"
 
@@ -16,6 +16,14 @@ export function WelcomeBackCard() {
         <Button asChild>
           <Link href="/dashboard">
             Continue to Dashboard <ArrowRightIcon className="ml-1.5 size-4" />
+          </Link>
+        </Button>
+      </div>
+      <div className="flex justify-center">
+        <Button className="bg-purple-900" asChild>
+          <Link href="/pangea/services">
+           <ArrowLeftIcon className="mr-1.5 size-4" />
+            Explore Pangea Services
           </Link>
         </Button>
       </div>
