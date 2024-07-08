@@ -33,7 +33,7 @@ export default async function DashboardHome() {
             organization.)
           </p>
           <div className="mt-3">
-            <Link href="/pangea" className="w-full">
+            <Link href="/pangea/services" className="w-full">
               <Button className="w-full bg-purple-800">
                 <ArrowLeftIcon className="mr-2 size-4" />
                 See Pangea Services
