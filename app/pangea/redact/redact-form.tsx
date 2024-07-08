@@ -55,7 +55,7 @@ export function RedactForm({ organization }: Props) {
             <Textarea
               id="targetText"
               name="targetText"
-              defaultValue={`My email is admin@${organization.slug}.com, phone numer is (555)-555-5555.`}
+              defaultValue={`My email is admin@${organization.slug}.com, phone number is (555)-555-5555.`}
               rows={10}
             />
           </div>
