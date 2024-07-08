@@ -26,9 +26,9 @@ export default async function RootLayout({
       <head>
           <link rel="preconnect" href="https://fonts.googleapis.com" />
           <link rel="preconnect" href="https://fonts.gstatic.com"/>
-          <script src="/vendor/audit-log-viewer.js"></script>
-          <script src="/vendor/store-file-viewer.js"></script>
-          <script src="/vendor/init.js"></script>
+          <script src="/vendor/audit-log-viewer.js" defer></script>
+          <script src="/vendor/store-file-viewer.js" defer></script>
+          <script src="/vendor/init.js" defer></script>
 
       </head>
       <body className="min-h-screen bg-background font-sans antialiased">
