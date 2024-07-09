@@ -276,7 +276,7 @@ registerAuditLogViewer({
       const { result } = await resp.json()
       return result
     },
-    onPageChange: async function () {
+    onPageChange: async function (req) {
       const resp = await fetch("/api/pangea/audit", {
         method: "POST",
         body: JSON.stringify({
