@@ -26,6 +26,10 @@ export default async function RootLayout({
       <head>
           <link rel="preconnect" href="https://fonts.googleapis.com" />
           <link rel="preconnect" href="https://fonts.gstatic.com"/>
+          <link
+            href="https://fonts.googleapis.com/css2?family=Kanit:wght@100;300;400;500;600;700&display=swap"
+            rel="stylesheet"
+          />
           <script src="/vendor/audit-log-viewer.js" defer></script>
           <script src="/vendor/store-file-viewer.js" defer></script>
           <script src="/vendor/init.js" defer></script>
