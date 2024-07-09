@@ -14,16 +14,12 @@ export default async function PangeaDemo() {
     <div className="space-y-2">
       <PageHeader
         title="Pangea Services"
-        description="The whole kitchen sink of security."
+        description="After enabling your app with Auth0, you can extend it with over 17 additional security features to deliver an even more secure user experience. Pangea services extend the security of your SaaS application with audit logging, secure document sharing, PII redaction, and much more. The menu on the left provides some sample use cases for your app."
       />
       <div className="pl-6 pr-6">
-        <p className="text-muted-foreground">
-          You can configure Pangea services to use in your SAAS application. The
-          menu on the left provides some sample usecases for your app.
-        </p>
-        <div className="mt-3">
+        <div>
           <Link href="https://pangea.cloud">
-            <Button className="dark:text-white bg-purple-800">
+            <Button className="bg-purple-800 dark:text-white">
               Sign up for a Pangea account
             </Button>
           </Link>
@@ -37,9 +33,23 @@ export default async function PangeaDemo() {
       </div>
       <ServiceEntry
         name="Secure Audit Log"
-        description="
-          A secure audit log is a critical component of any system that requires accountability and transparency by providing an accurate and secure record of all system events.
-            "
+        description={
+          <>
+            Enable your app with an embedded secure audit trail. A critical
+            component of any system is accountability and transparency. A secure
+            audit trail is essential for logging important security events,
+            ranging from authentication and authorization, to medical and
+            financial record access.{" "}
+            <a className="underline text-blue-300" href="https://pangea.cloud/docs/audit/log-streaming/auth0">
+              Extend Auth0’s 30 day log retention by streaming events to Pangea
+              Secure Audit Log
+            </a>{" "}
+            and you will unlock log retention of up to 10 years, hot/warm/cold
+            storage tier configuration to optimize search and cost, Redact
+            integration, tamper-proofing safeguards, and an embeddable log
+            viewer UI component.
+          </>
+        }
         icon={
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -62,9 +72,7 @@ export default async function PangeaDemo() {
       />
       <ServiceEntry
         name="Secure Share"
-        description="
-        Pangea’s Secure Share service is a file system that provides protected data storage for files and folders, as well as the ability to securely manage access and sharing. Organizations can upload files to Pangea, generate shareable links, and choose to allow users to upload, download, or edit their files while managing access by number of views and length of time the URL is available. Shares can even require password authentication, or utilize One Time Passcodes (OTP) via email or SMS to prevent unauthorized access.
-            "
+        description="If your application needs to securely send or receive documents from users, then Pangea Secure Share can help. Pangea’s Secure Share service extends your app with a Google Drive-like capability to securely send and receive documents and files, and securely manage access and sharing. Users can upload files to your app, generate share links, and securely send files to others, while managing access by number of views and length of time the share link is available. Share links are protected with either password authentication, or MFA using SMS or One Time Passcodes (OTP) via email."
         icon={
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -87,14 +95,11 @@ export default async function PangeaDemo() {
       />
       <ServiceEntry
         name="Redact"
-        description="
-            Pangea’s Redact service helps developers control sensitive
-            information by performing redaction using defined rules. Redact
-            comes equipped with out-of-the-box rules to address personally
-            identifiable information (PII), geographic locations, payment card
-            industry (PCI) data, and many other types of sensitive information,
-            while also providing rule customization to fit the needs of your
-            application."
+        description={
+          <>
+        If your app handles Personally Identifiable Information (PII), Pangea’s Redact service helps prevent it’s disclosure by performing redaction of over 50 known types of PII. Redact comes equipped with out-of-the-box rules to detect PII, geographic locations, payment card industry (PCI) data, and many other types of sensitive information, while providing rule customization to fit the needs of your app.  Protect sensitive information and comply with standards, regulations, and legal requirements by using Redact throughout your app and on your <a className="underline text-blue-300" href="https://pangea.cloud/docs/audit/log-streaming/auth0">Auth0 logs streamed to Pangea Secure Audit Log</a>.
+            </>
+        }
         icon={
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -148,7 +153,7 @@ export default async function PangeaDemo() {
 
 interface ServiceEntryProps {
   name: string
-  description: string
+  description: React.ReactNode
   icon: React.ReactNode
   settingsLink: string
   documentationLink: string
@@ -165,9 +170,11 @@ function ServiceEntry(props: ServiceEntryProps) {
           {props.name}
         </p>
         <p className="mt-2 text-muted-foreground">{props.description}</p>
-        <div className="mt-3">
+        <div className="mt-7">
           <Link href={props.settingsLink} className="">
-            <Button className="dark:text-white bg-purple-800">Configure {props.name}</Button>
+            <Button className="bg-purple-800 dark:text-white">
+              Configure {props.name}
+            </Button>
           </Link>
           <Link href={props.documentationLink} className="pl-2">
             <Button variant="secondary">Documentation</Button>

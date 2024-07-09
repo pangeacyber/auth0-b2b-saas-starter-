@@ -15,7 +15,19 @@ export default function SecureAuditLog() {
     <div className="space-y-2">
       <PageHeader
         title="Secure Audit Log"
-        description="A secure audit log is a critical component of any system that requires accountability and transparency by providing an accurate and secure record of all system events."
+        description={
+          <>
+            A secure audit log is a critical component of any system that
+            requires accountability and transparency by providing an accurate
+            and secure record of all system events.{" "}
+            <a className="underline text-blue-300" href="https://pangea.cloud/docs/audit/log-streaming/auth0">
+              Configure Auth0 to stream log events to Pangea Secure Audit Log
+            </a>{" "}
+            and you will unlock benefits like log retention of up to 10 years,
+            hot/warm/cold storage tier configuration to optimize search and
+            cost, Redact integration, and tamper-proofing safeguards.
+          </>
+        }
       />
 
       <Card>
