@@ -1,6 +1,6 @@
 interface PageHeaderProps {
   title: string
-  description: string
+  description: string | React.ReactNode
 }
 
 export const PageHeader = ({ title, description }: PageHeaderProps) => {

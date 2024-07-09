@@ -13,7 +13,26 @@ export default async function RedactPage() {
     <div className="space-y-2">
       <PageHeader
         title="PII & Sensitive Data Redaction"
-        description="Secure your sensitive data with Pangea's Redact service."
+        description={
+          <>
+            Pangea’s Redact service helps developers control sensitive
+            information by performing redaction using defined rules. Redact
+            comes equipped with out-of-the-box rules to address personally
+            identifiable information (PII), geographic locations, payment card
+            industry (PCI) data, and many other types of sensitive information,
+            while also providing rule customization to fit the needs of your
+            application. Protect sensitive information and comply with
+            standards, regulations, and legal requirements by using Redact
+            throughout your app and on your{" "}
+            <a
+              className="text-blue-300 underline"
+              href="https://pangea.cloud/docs/audit/log-streaming/auth0"
+            >
+              Auth0 logs streamed to Pangea Secure Audit Log
+            </a>
+            .
+          </>
+        }
       />
 
       <RedactForm
