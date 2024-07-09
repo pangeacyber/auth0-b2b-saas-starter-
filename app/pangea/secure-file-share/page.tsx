@@ -9,7 +9,17 @@ import {
   CardTitle,
 } from "@/components/ui/card"
 import { PageHeader } from "@/components/page-header"
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
+
+import { THEME_OPTIONS, StoreCallbackHandler } from "@/lib/pangea-utils";
+
+import { ThemeProvider, createTheme } from "@mui/material/styles";
+import ScopedCssBaseline from "@mui/material/ScopedCssBaseline";
+import { StoreFileViewer } from "@pangeacyber/react-mui-store-file-viewer";
+
+import createCache from "@emotion/cache";
+import { CacheProvider } from "@emotion/react";
+
 
 export default function SecureFileShare() {
   const [matches, setMatches] = useState(true)
@@ -20,8 +30,23 @@ export default function SecureFileShare() {
     .addEventListener('change', e => setMatches( e.matches ));
   }, []);
 
+  const cache = useMemo(() => {
+    return createCache({ key: "secure-file-share", prepend: true });
+  }, [])
+
+  const theme = useMemo(() => {
+    return createTheme({
+      ...THEME_OPTIONS
+    } as any);
+  }, [])
+
   return (
-    <div className="space-y-2">
+    <div className="space-y-2" style={{
+      // @ts-ignore
+      ".Pangea-Flyout-Container": {
+        "backgroundColor": "hsl(var(--foreground))!important"
+      }
+    }}>
       <PageHeader
         title="Secure File Share"
         description={
@@ -48,7 +73,20 @@ export default function SecureFileShare() {
         </CardHeader>
         <CardContent>
           <div style={{ width: `calc(100vw - ${matches ? "350px" : "100px"})`, maxWidth: "100%" }}>
-            <store-file-viewer id="1"></store-file-viewer>
+              <CacheProvider value={cache}>
+                <ThemeProvider theme={theme}>
+                  <ScopedCssBaseline
+                    style={{
+                      width: "100%",
+                      height: "100%"
+                    }}
+                  >   
+                    <StoreFileViewer
+                      apiRef={StoreCallbackHandler}
+                    />
+                  </ScopedCssBaseline>
+                  </ThemeProvider>
+              </CacheProvider>
           </div>
         </CardContent>
         <CardFooter className="flex justify-end"></CardFooter>
