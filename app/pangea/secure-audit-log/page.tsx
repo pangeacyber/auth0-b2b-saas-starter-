@@ -9,8 +9,17 @@ import {
   CardTitle,
 } from "@/components/ui/card"
 import { PageHeader } from "@/components/page-header"
+import { useEffect, useState } from "react";
 
 export default function SecureAuditLog() {
+  const [matches, setMatches] = useState(true)
+
+  useEffect(() => {
+    window
+    .matchMedia("(min-width: 1050px)")
+    .addEventListener('change', e => setMatches( e.matches ));
+  }, []);
+
   return (
     <div className="space-y-2">
       <PageHeader
@@ -38,7 +47,7 @@ export default function SecureAuditLog() {
           </CardDescription>
         </CardHeader>
         <CardContent>
-          <div>
+          <div style={{ width: `calc(100vw - ${matches ? "350px" : "100px"})`, maxWidth: "100%" }}>
             <audit-log-viewer id="1"></audit-log-viewer>
           </div>
         </CardContent>
