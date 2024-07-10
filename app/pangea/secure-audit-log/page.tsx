@@ -95,7 +95,7 @@ export default function SecureAuditLog() {
       configureLink="https://console.pangea.cloud/service/audit"
       documentationLink="https://pangea.cloud/docs/audit"
       tickleLink="https://pangea.cloud/docs/api/audit/"
-      componentTitle="Secure File Share Component Example"
+      componentTitle="Secure Audit Log Component Example"
       componentDescription="A pre-built, customizable component for viewing files and sharing them between users."
       matches={matches}
     >
