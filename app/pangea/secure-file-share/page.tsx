@@ -1,11 +1,12 @@
 "use client"
 
+import dayjs from "dayjs";
 import { useEffect, useMemo, useState } from "react"
 import createCache from "@emotion/cache"
 import { CacheProvider } from "@emotion/react"
 import ScopedCssBaseline from "@mui/material/ScopedCssBaseline"
 import { createTheme, ThemeProvider } from "@mui/material/styles"
-import { StoreFileViewer } from "@pangeacyber/react-mui-store-file-viewer"
+import { StoreFileViewer, StoreConfigurations } from "@pangeacyber/react-mui-store-file-viewer"
 
 import { StoreCallbackHandler, THEME_OPTIONS } from "@/lib/pangea-utils"
 
@@ -28,7 +29,23 @@ export default function SecureFileShare() {
     return createTheme({
       ...THEME_OPTIONS,
     } as any)
-  }, [])
+  }, []);
+
+  const configurations = useMemo(() => {
+    let dayDate = dayjs();
+    dayDate = dayDate.add(7, "day");
+
+    const date = new Date();
+    date.setDate(date.getDate() + 7);
+
+    return {
+      settings: {
+        defaultAccessCount: 7,
+        maxAccessCount: 7,
+        maxDate: dayDate,
+      },
+    } as StoreConfigurations;
+  }, []);
 
   return (
     <PangeaPage
@@ -77,7 +94,7 @@ export default function SecureFileShare() {
               height: "100%",
             }}
           >
-            <StoreFileViewer apiRef={StoreCallbackHandler} />
+            <StoreFileViewer configurations={configurations} apiRef={StoreCallbackHandler} />
           </ScopedCssBaseline>
         </ThemeProvider>
       </CacheProvider>

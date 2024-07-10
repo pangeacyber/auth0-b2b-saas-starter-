@@ -186,6 +186,13 @@ export const THEME_OPTIONS = {
           }
         }
       },
+      "MuiChip": {
+        "styleOverrides": {
+            "root": {
+                "backgroundColor": "hsl(var(--accent))"
+            }
+        }
+      },
       "MuiCheckbox": {
         "styleOverrides": {
           "root": {
@@ -249,6 +256,11 @@ export const THEME_OPTIONS = {
       "action": {
         "main": "hsl(var(--foreground))",
         "active": "hsl(var(--foreground))",
+      },
+      "info": {
+        "light": "hsl(var(--accent))",
+        "main": "#0288d1",
+        "dark": "#01579b",
       },
       "primary": {
         "main": "hsl(var(--primary))",
