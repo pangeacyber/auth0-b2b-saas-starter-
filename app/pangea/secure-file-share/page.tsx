@@ -65,7 +65,7 @@ export default function SecureFileShare() {
       configureLink="https://console.pangea.cloud/service/share"
       documentationLink="https://pangea.cloud/docs/share"
       tickleLink="https://pangea.cloud/docs/api/share/"
-      componentTitle="Secure File Share Component Example"
+      componentTitle="Secure Share Component Example"
       componentDescription="A pre-built, customizable component for viewing files and sharing them between users."
       matches={matches}
     >
