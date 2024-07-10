@@ -88,3 +88,7 @@
 .MuiButtonBase-root[hidden] {
   display: inline-flex;
 }
+
+.MuiButtonBase-root.Mui-disabled.MuiPickersDay-root {
+  color: hsl(var(--muted-foreground));
+}
