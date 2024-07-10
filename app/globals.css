@@ -84,3 +84,7 @@
 .Pangea-Flyout-Container {
   background-color: hsl(var(--foreground));
 }
+
+.MuiButtonBase-root[hidden] {
+  display: inline-flex;
+}
