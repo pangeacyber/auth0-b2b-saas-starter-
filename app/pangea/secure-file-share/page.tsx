@@ -32,7 +32,7 @@ export default function SecureFileShare() {
 
   return (
     <PangeaPage
-      serviceName="Secure File Share"
+      serviceName="Secure Share"
       icon={
         <svg
           xmlns="http://www.w3.org/2000/svg"
