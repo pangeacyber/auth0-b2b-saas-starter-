@@ -1,96 +1,86 @@
 "use client"
 
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card"
-import { PageHeader } from "@/components/page-header"
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react"
+import createCache from "@emotion/cache"
+import { CacheProvider } from "@emotion/react"
+import ScopedCssBaseline from "@mui/material/ScopedCssBaseline"
+import { createTheme, ThemeProvider } from "@mui/material/styles"
+import { StoreFileViewer } from "@pangeacyber/react-mui-store-file-viewer"
 
-import { THEME_OPTIONS, StoreCallbackHandler } from "@/lib/pangea-utils";
+import { StoreCallbackHandler, THEME_OPTIONS } from "@/lib/pangea-utils"
 
-import { ThemeProvider, createTheme } from "@mui/material/styles";
-import ScopedCssBaseline from "@mui/material/ScopedCssBaseline";
-import { StoreFileViewer } from "@pangeacyber/react-mui-store-file-viewer";
-
-import createCache from "@emotion/cache";
-import { CacheProvider } from "@emotion/react";
-
+import { PangeaPage } from "../pangea-page"
 
 export default function SecureFileShare() {
   const [matches, setMatches] = useState(true)
 
   useEffect(() => {
     window
-    .matchMedia("(min-width: 1050px)")
-    .addEventListener('change', e => setMatches( e.matches ));
-  }, []);
+      .matchMedia("(min-width: 1050px)")
+      .addEventListener("change", (e) => setMatches(e.matches))
+  }, [])
 
   const cache = useMemo(() => {
-    return createCache({ key: "secure-file-share", prepend: true });
+    return createCache({ key: "secure-file-share", prepend: true })
   }, [])
 
   const theme = useMemo(() => {
     return createTheme({
-      ...THEME_OPTIONS
-    } as any);
+      ...THEME_OPTIONS,
+    } as any)
   }, [])
 
   return (
-    <div className="space-y-2" style={{
-      // @ts-ignore
-      ".Pangea-Flyout-Container": {
-        "backgroundColor": "hsl(var(--foreground))!important"
+    <PangeaPage
+      serviceName="Secure File Share"
+      icon={
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          fill="none"
+          viewBox="0 0 24 24"
+          strokeWidth={1.5}
+          stroke="currentColor"
+          className="-mt-1 inline size-8 text-purple-800"
+        >
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            d="M16.5 10.5V6.75a4.5 4.5 0 1 0-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 0 0 2.25-2.25v-6.75a2.25 2.25 0 0 0-2.25-2.25H6.75a2.25 2.25 0 0 0-2.25 2.25v6.75a2.25 2.25 0 0 0 2.25 2.25Z"
+          />
+        </svg>
       }
-    }}>
-      <PageHeader
-        title="Secure File Share"
-        description={
-          <>
-            Pangea’s Secure Share service is a file system that provides
-            protected data storage for files and folders, as well as the ability
-            to securely manage access and sharing. Organizations can upload
-            files to Pangea, generate shareable links, and choose to allow users
-            to upload, download, or edit their files while managing access by
-            number of views and length of time the URL is available. Shares can
-            even require password authentication, or utilize One Time Passcodes
-            (OTP) via email or SMS to prevent unauthorized access.
-          </>
-        }
-      />
-
-      <Card>
-        <CardHeader>
-          <CardTitle>Secure File Share Component Example</CardTitle>
-          <CardDescription>
-            A pre-built, customizable component for viewing files and sharing
-            them between users.
-          </CardDescription>
-        </CardHeader>
-        <CardContent>
-          <div style={{ width: `calc(100vw - ${matches ? "350px" : "100px"})`, maxWidth: "100%" }}>
-              <CacheProvider value={cache}>
-                <ThemeProvider theme={theme}>
-                  <ScopedCssBaseline
-                    style={{
-                      width: "100%",
-                      height: "100%"
-                    }}
-                  >   
-                    <StoreFileViewer
-                      apiRef={StoreCallbackHandler}
-                    />
-                  </ScopedCssBaseline>
-                  </ThemeProvider>
-              </CacheProvider>
-          </div>
-        </CardContent>
-        <CardFooter className="flex justify-end"></CardFooter>
-      </Card>
-    </div>
+      description={
+        <>
+          If your application needs to securely send or receive documents from
+          users, then Pangea Secure Share can help. Pangea’s Secure Share
+          service extends your app with a Google Drive-like capability to
+          securely send and receive documents and files, and securely manage
+          access and sharing. Users can upload files to your app, generate share
+          links, and securely send files to others, while managing access by
+          number of views and length of time the share link is available. Share
+          links are protected with either password authentication, or MFA using
+          SMS or One Time Passcodes (OTP) via email.
+        </>
+      }
+      configureLink="https://console.pangea.cloud/service/share"
+      documentationLink="https://pangea.cloud/docs/share"
+      tickleLink="https://pangea.cloud/docs/api/share/"
+      componentTitle="Secure File Share Component Example"
+      componentDescription="A pre-built, customizable component for viewing files and sharing them between users."
+      matches={matches}
+    >
+      <CacheProvider value={cache}>
+        <ThemeProvider theme={theme}>
+          <ScopedCssBaseline
+            style={{
+              width: "100%",
+              height: "100%",
+            }}
+          >
+            <StoreFileViewer apiRef={StoreCallbackHandler} />
+          </ScopedCssBaseline>
+        </ThemeProvider>
+      </CacheProvider>
+    </PangeaPage>
   )
 }

@@ -28,9 +28,11 @@ export default async function PangeaDemo() {
               Learn more about Pangea Services
             </Button>
           </Link>
-        </div>
-        <hr className="mt-6" />
       </div>
+      </div>
+        {/*<hr className="mt-6" />
+      </div>
+      {/*
       <ServiceEntry
         name="Secure Audit Log"
         description={
@@ -120,7 +122,6 @@ export default async function PangeaDemo() {
         documentationLink="https://pangea.cloud/docs/redact"
         tickleLink="https://pangea.cloud/docs/api/redact/"
       />
-      {/*
       <ServiceEntry
         name="Sanitize"
         description="

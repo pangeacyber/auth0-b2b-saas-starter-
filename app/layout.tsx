@@ -30,10 +30,6 @@ export default async function RootLayout({
             href="https://fonts.googleapis.com/css2?family=Kanit:wght@100;300;400;500;600;700&display=swap"
             rel="stylesheet"
           />
-          <script src="/vendor/audit-log-viewer.js" defer></script>
-          <script src="/vendor/store-file-viewer.js" defer></script>
-          <script src="/vendor/init.js" defer></script>
-
       </head>
       <body className="min-h-screen bg-background font-sans antialiased">
         <ThemeProvider

@@ -1,4 +1,4 @@
-"use client"
+"use client";
 
 import React, { useEffect, useRef, useState } from "react"
 import { toast } from "sonner"
@@ -24,7 +24,7 @@ interface Props {
 
 export function RedactForm({ organization }: Props) {
   const [text, setText] = useState("Redacted text will show up here.")
-  const [sent, setSent] = useState(false);
+  const [sent, setSent] = useState(false)
 
   return (
     <Card>
@@ -34,13 +34,13 @@ export function RedactForm({ organization }: Props) {
           const text = (
             e.currentTarget.elements.namedItem("targetText") as HTMLInputElement
           ).value
-          console.log(text);
+          console.log(text)
           const resp = await fetch("/api/pangea/redact", {
             method: "POST",
             body: JSON.stringify({ message: text }),
           })
           const { message } = await resp.json()
-          setSent(true);
+          setSent(true)
           setText(message)
         }}
       >
@@ -59,7 +59,11 @@ export function RedactForm({ organization }: Props) {
               rows={10}
             />
           </div>
-          { sent && <h3 className="font-semibold leading-none tracking-tight">Redacted Text:</h3> }
+          {sent && (
+            <h3 className="font-semibold leading-none tracking-tight">
+              Redacted Text:
+            </h3>
+          )}
           <p className="text-sm text-muted-foreground">{text}</p>
         </CardContent>
         <CardFooter className="flex justify-end">
