@@ -48,14 +48,16 @@ async function fetchStore(
         auditAction = "Downloaded File"
         auditActor = email
         auditMessage = `${email} downloaded ${body.id || body.path}`
+      } else {
+        return new Response(JSON.stringify(objectResp), {
+          status: 200,
+          headers: {
+            "Content-Type": "application/json",
+          },
+        })
       }
-      return new Response(JSON.stringify(objectResp), {
-        status: 200,
-        headers: {
-          "Content-Type": "application/json",
-        },
-      })
     }
+    break;
     case "/v1beta/list": {
       // If a filter is not present, or the filter folder does not start with email
       if (body.filter && body.filter.parent_id) {
