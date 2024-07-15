@@ -2,7 +2,7 @@ import { NextRequest } from "next/server"
 import { appClient } from "@/lib/auth0"
 import { SecureShareClient } from "@/lib/pangea"
 
-import { getObject } from "../route"
+import { getObject } from "../utils"
 
 const shareClient = new SecureShareClient()
 
