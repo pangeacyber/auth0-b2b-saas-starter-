@@ -127,17 +127,6 @@ export default function SecureAuditLog() {
                       schema={{
                           fields: [
                             {
-                              id: "date",
-                              name: "Date",
-                              size: 128,
-                              type: "datetime",
-                              redact: false,
-                              required: false,
-                              description:
-                                "This is the time stamp generated at the time the log was created.",
-                              ui_default_visible: true,
-                            },
-                            {
                               id: "type",
                               name: "Type",
                               size: 128,
@@ -155,6 +144,39 @@ export default function SecureAuditLog() {
                               redact: false,
                               required: false,
                               description: "Description of the event.",
+                              ui_default_visible: true,
+                            },
+                            {
+                              id: "date",
+                              name: "Date",
+                              size: 128,
+                              type: "datetime",
+                              redact: false,
+                              required: false,
+                              description:
+                                "This is the time stamp generated at the time the log was created.",
+                              ui_default_visible: true,
+                            },
+                            {
+                              id: "connection",
+                              name: "Connection",
+                              size: 128,
+                              type: "string",
+                              redact: false,
+                              required: false,
+                              description:
+                                "Connection that triggered the event.",
+                              ui_default_visible: true,
+                            },
+                            {
+                              id: "client_name",
+                              name: "Application",
+                              size: 128,
+                              type: "string",
+                              redact: false,
+                              required: false,
+                              description:
+                                "The Name of the client that triggered the event.",
                               ui_default_visible: true,
                             },
                             {
@@ -189,17 +211,6 @@ export default function SecureAuditLog() {
                               ui_default_visible: false,
                             },
                             {
-                              id: "client_name",
-                              name: "Client Name",
-                              size: 128,
-                              type: "string",
-                              redact: false,
-                              required: false,
-                              description:
-                                "The Name of the client that triggered the event.",
-                              ui_default_visible: false,
-                            },
-                            {
                               id: "user_id",
                               name: "User ID",
                               size: 128,
@@ -230,17 +241,6 @@ export default function SecureAuditLog() {
                               required: false,
                               description:
                                 "Description of the agent that triggered the event.",
-                              ui_default_visible: false,
-                            },
-                            {
-                              id: "connection",
-                              name: "Connection",
-                              size: 128,
-                              type: "string",
-                              redact: false,
-                              required: false,
-                              description:
-                                "Connection that triggered the event.",
                               ui_default_visible: false,
                             },
                             {
@@ -303,7 +303,7 @@ export default function SecureAuditLog() {
                               required: false,
                               description:
                                 "Extra details of the event. JSON formatted.",
-                              ui_default_visible: true,
+                              ui_default_visible: false,
                             },
                             {
                               id: "event_details",
