@@ -286,7 +286,7 @@ function storeProxyFetch(path: string) {
     return async function(req: Record<any, any>) {
       const resp = await fetch(`/api/pangea/share`, {
         method: "POST",
-        body: JSON.stringify({path: path, ...req}),
+        body: JSON.stringify({path: path, params: {...req}}),
         cache: "no-cache",
         credentials: "same-origin",
       })

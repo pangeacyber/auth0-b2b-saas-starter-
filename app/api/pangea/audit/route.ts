@@ -10,8 +10,9 @@ interface Data {
 }
 
 export const POST = appClient.withApiAuthRequired(async (req: NextRequest) => {
-  const body = (await req.json()) as Data
+  const session = await appClient.getSession();
 
+  const body = (await req.json()) as Data
   const { path: action, ...params } = body
 
   if (!body.path) {
