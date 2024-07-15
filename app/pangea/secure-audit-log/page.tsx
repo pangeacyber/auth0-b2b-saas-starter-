@@ -303,7 +303,7 @@ export default function SecureAuditLog() {
                               required: false,
                               description:
                                 "Extra details of the event. JSON formatted.",
-                              ui_default_visible: false,
+                              ui_default_visible: true,
                             },
                             {
                               id: "event_details",
