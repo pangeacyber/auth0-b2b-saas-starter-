@@ -10,31 +10,32 @@ export const Tabs = ({
   const [index, setIndex] = useState(defaultIndex || 0)
 
   const tabTitles = tabs.map(({ title }, i) => {
-    const idx = i;
-    const selected = "inline-block p-4 font-sans font-semibold border-b-2 border-black rounded-t-lg active dark:text-white dark:border-white"
-    const notSelected ="inline-block p-4 font-sans border-b-2 border-transparent rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300"
+    const idx = i
+    const selected =
+      "inline-block p-4 font-sans font-semibold border-b-2 border-black rounded-t-lg active dark:text-white dark:border-white"
+    const notSelected =
+      "inline-block p-4 font-sans border-b-2 border-transparent rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300"
 
     return (
-    <li className="me-2" role="presentation">
-      <button
-        className={idx == index ? selected : notSelected}
-        id={`${title}-tab`}
-        type="button"
-        role="tab"
-        aria-controls={`${title}`}
-        aria-selected={i == idx}
-        onClick={() => setIndex(idx)}
-      >
-      { title }
-      </button>
-    </li>
-    );
+      <li key={`tabtitle-${title}-${idx}`} className="me-2" role="presentation">
+        <button
+          className={idx == index ? selected : notSelected}
+          type="button"
+          role="tab"
+          aria-controls={`${title}`}
+          aria-selected={i == idx}
+          onClick={() => setIndex(idx)}
+        >
+          {title}
+        </button>
+      </li>
+    )
   })
 
   const tabContent = tabs.map(({ title, content }, i) => (
     <div
       className={`${i != index && "hidden"} rounded-lg bg-gray-50 p-4 dark:bg-gray-800`}
-      id={title}
+      key={`tabcontent-${title}-${i}`}
       role="tabpanel"
       aria-labelledby={`${title}-tab`}
     >
