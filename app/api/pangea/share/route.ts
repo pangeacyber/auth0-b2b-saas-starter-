@@ -141,6 +141,7 @@ async function fetchStore(
           ? (body.path = `${rootFolder}/${body.path}`)
           : (body.path = `${rootFolder}/${body.name}`)
       }
+      delete body.name;
       auditAction = "Folder Created"
       auditActor = email
       auditMessage = `${email} created folder ${body.path}`
