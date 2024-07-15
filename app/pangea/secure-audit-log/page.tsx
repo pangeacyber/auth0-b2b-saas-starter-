@@ -7,29 +7,32 @@ import { CacheProvider } from "@emotion/react"
 import ScopedCssBaseline from "@mui/material/ScopedCssBaseline"
 import { createTheme, ThemeProvider } from "@mui/material/styles"
 import { Audit, AuditLogViewer } from "@pangeacyber/react-mui-audit-log-viewer"
+
 import { THEME_OPTIONS } from "@/lib/pangea-utils"
+import { Tabs } from "@/components/ui/tabs"
 
 import { PangeaPage } from "../pangea-page"
 
-export default function SecureAuditLog() {
-  const [matches, setMatches] = useState(true)
+const onSearch = (configId?: string) => async (req: Audit.SearchRequest) => {
+  const resp = await fetch("/api/pangea/audit", {
+    method: "POST",
+    body: JSON.stringify({
+      path: "/v1/search",
+      config_id: configId,
+      ...req,
+    }),
+  })
+  const { result } = await resp.json()
+  return result
+}
 
-  const onSearch = async (req: Audit.SearchRequest) => {
-    const resp = await fetch("/api/pangea/audit", {
-      method: "POST",
-      body: JSON.stringify({
-        path: "/v1/search",
-        ...req,
-      }),
-    })
-    const { result } = await resp.json()
-    return result
-  }
-  const onPageChange = async (req: Audit.ResultRequest) => {
+const onPageChange =
+  (configId?: string) => async (req: Audit.ResultRequest) => {
     const resp = await fetch("/api/pangea/audit", {
       method: "POST",
       body: JSON.stringify({
         path: "/v1/results",
+        config_id: configId,
         ...req,
       }),
     })
@@ -37,6 +40,8 @@ export default function SecureAuditLog() {
     return result
   }
 
+export default function SecureAuditLog() {
+  const [matches, setMatches] = useState(true)
   useEffect(() => {
     window
       .matchMedia("(min-width: 1050px)")
@@ -107,7 +112,36 @@ export default function SecureAuditLog() {
               height: "100%",
             }}
           >
-            <AuditLogViewer onSearch={onSearch} onPageChange={onPageChange} />
+            <Tabs
+              tabs={[
+                {
+                  title: "Authentication Events",
+                  content: (
+                    <AuditLogViewer
+                      onSearch={onSearch(
+                        process.env.NEXT_PUBLIC_PANGEA_AUDIT_AUTH0_CONFIG_ID
+                      )}
+                      onPageChange={onPageChange(
+                        process.env.NEXT_PUBLIC_PANGEA_AUDIT_AUTH0_CONFIG_ID
+                      )}
+                    />
+                  ),
+                },
+                {
+                  title: "Service Events",
+                  content: (
+                    <AuditLogViewer
+                      onSearch={onSearch(
+                        process.env.NEXT_PUBLIC_PANGEA_AUDIT_SERVICES_CONFIG_ID
+                      )}
+                      onPageChange={onPageChange(
+                        process.env.NEXT_PUBLIC_PANGEA_AUDIT_SERVICES_CONFIG_ID
+                      )}
+                    />
+                  ),
+                },
+              ]}
+            />
           </ScopedCssBaseline>
         </ThemeProvider>
       </CacheProvider>
