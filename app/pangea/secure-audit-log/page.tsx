@@ -148,7 +148,7 @@ export default function SecureAuditLog() {
                             {
                               id: "type",
                               name: "Type",
-                              size: 128,
+                              size: 32766,
                               type: "string",
                               redact: false,
                               required: false,
@@ -158,7 +158,7 @@ export default function SecureAuditLog() {
                             {
                               id: "description",
                               name: "Description",
-                              size: 128,
+                              size: 32766,
                               type: "string",
                               redact: false,
                               required: false,
@@ -179,7 +179,7 @@ export default function SecureAuditLog() {
                             {
                               id: "connection",
                               name: "Connection",
-                              size: 128,
+                              size: 32766,
                               type: "string",
                               redact: false,
                               required: false,
