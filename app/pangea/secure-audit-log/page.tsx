@@ -40,6 +40,20 @@ const onPageChange =
     return result
   }
 
+const onFetchRoot =
+  (configId?: string) => async (req: Audit.RootRequest) => {
+    const resp = await fetch("/api/pangea/audit", {
+      method: "POST",
+      body: JSON.stringify({
+        path: "/v1/root",
+        config_id: configId,
+        ...req,
+      }),
+    })
+    const { result } = await resp.json()
+    return result
+  }
+
 export default function SecureAuditLog() {
   const [matches, setMatches] = useState(true)
   useEffect(() => {
@@ -124,6 +138,11 @@ export default function SecureAuditLog() {
                       onPageChange={onPageChange(
                         process.env.NEXT_PUBLIC_PANGEA_AUDIT_AUTH0_CONFIG_ID
                       )}
+                      verificationOptions={{
+                        onFetchRoot: onFetchRoot(
+                          process.env.NEXT_PUBLIC_PANGEA_AUDIT_AUTH0_CONFIG_ID
+                        )
+                      }}
                       schema={{
                           fields: [
                             {
@@ -354,6 +373,11 @@ export default function SecureAuditLog() {
                       onPageChange={onPageChange(
                         process.env.NEXT_PUBLIC_PANGEA_AUDIT_SERVICES_CONFIG_ID
                       )}
+                      verificationOptions={{
+                        onFetchRoot: onFetchRoot(
+                          process.env.NEXT_PUBLIC_PANGEA_AUDIT_AUTH0_CONFIG_ID
+                        )
+                      }}
                     />
                   ),
                 },

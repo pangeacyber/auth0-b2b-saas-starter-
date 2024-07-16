@@ -60,15 +60,15 @@ export const PangeaPage = ({
           <>
             {description}
             <div className="mt-7">
-              <Link href={configureLink}>
+              <Link href={configureLink} target="_blank">
                 <Button className="bg-purple-800 dark:text-white">
                   Configure {serviceName}
                 </Button>
               </Link>
-              <Link href={documentationLink} className="pl-2">
+              <Link href={documentationLink} className="pl-2" target="_blank">
                 <Button variant="secondary">Documentation</Button>
               </Link>
-              <Link href={tickleLink} className="pl-2">
+              <Link href={tickleLink} className="pl-2" target="_blank">
                 <Button variant="outline">Try It</Button>
               </Link>
             </div>
