@@ -6,8 +6,7 @@ import { Inter } from "next/font/google"
 
 import { Toaster } from "@/components/ui/sonner"
 import { ThemeProvider } from "@/components/theme-provider"
-
-const inter = Inter({ subsets: ["latin"] })
+import { interFont } from "@/lib/font"
 
 export const metadata: Metadata = {
   title: "SaaStart | Auth0 by Okta",
@@ -22,7 +21,7 @@ export default async function RootLayout({
   children: React.ReactNode
 }>) {
   return (
-    <html lang="en" className={inter.className} suppressHydrationWarning>
+    <html lang="en" className={interFont.className} suppressHydrationWarning>
       <head>
           <link rel="preconnect" href="https://fonts.googleapis.com" />
           <link rel="preconnect" href="https://fonts.gstatic.com"/>
