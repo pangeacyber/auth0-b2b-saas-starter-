@@ -1,8 +1,9 @@
+import { interFont } from "./font";
 
 export const THEME_OPTIONS = {
     "spacing": 8,
     "typography": {
-      "fontFamily": "Kanit",
+      "fontFamily": interFont.style.fontFamily,
       "h6": {
         "fontSize": "24px",
         "fontWeight": "600"
