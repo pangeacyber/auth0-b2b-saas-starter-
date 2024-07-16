@@ -10,22 +10,11 @@ export const SERVICE_TO_SERVICE_AUDIT_SCHEMA: Audit.Schema = {
         redact: false,
         required: false,
         size: 128,
-        ui_default_visible: false,
-      },
-      {
-        id: "status",
-        name: "Status",
-        type: "string",
-        size: 128,
-        required: true,
         ui_default_visible: true,
-        redact: false,
-        description:
-          "Status of the event. Success if successful otherwise indicates an error.",
       },
       {
         id: "service_name",
-        name: "Service name",
+        name: "Service",
         type: "string",
         size: 128,
         required: true,
@@ -53,6 +42,17 @@ export const SERVICE_TO_SERVICE_AUDIT_SCHEMA: Audit.Schema = {
         redact: false,
         description:
           "Service feature generating the event. ex: key_generate feature in Vault service.",
+      },
+      {
+        id: "status",
+        name: "Status",
+        type: "string",
+        size: 128,
+        required: true,
+        ui_default_visible: true,
+        redact: false,
+        description:
+          "Status of the event. Success if successful otherwise indicates an error.",
       },
       {
         id: "message",
