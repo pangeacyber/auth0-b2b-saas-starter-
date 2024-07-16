@@ -74,7 +74,14 @@ My Credit Card number is 4917-4845-8989-7107`}
               Redacted Text:
             </h3>
           )}
-          <p className="text-sm text-muted-foreground">{text}</p>
+          <div className="grid w-full max-w-sm items-center gap-2">
+          <Textarea
+              className="text-sm text-muted-foreground"
+              disabled
+              value={text}
+              rows={12}
+            />
+            </div>
         </CardContent>
         <CardFooter className="flex justify-end">
           <SubmitButton>submit</SubmitButton>
