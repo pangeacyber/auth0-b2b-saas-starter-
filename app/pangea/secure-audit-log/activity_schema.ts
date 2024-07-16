@@ -2,12 +2,6 @@ import { Audit } from "@pangeacyber/react-mui-audit-log-viewer";
 
 export const SERVICE_TO_SERVICE_AUDIT_SCHEMA: Audit.Schema = {
     fields: [
-        {
-            id: "received_at",
-            name: "Time",
-            type: "datetime",
-            ui_default_visible: true,
-          },
       {
         id: "timestamp",
         type: "datetime",
@@ -16,7 +10,7 @@ export const SERVICE_TO_SERVICE_AUDIT_SCHEMA: Audit.Schema = {
         redact: false,
         required: false,
         size: 128,
-        ui_default_visible: false,
+        ui_default_visible: true,
       },
       {
         id: "service_name",
