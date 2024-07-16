@@ -49,7 +49,7 @@ export default function SecureAuditLog() {
   }, [])
 
   const cache = useMemo(() => {
-    return createCache({ key: "secure-file-share", prepend: true })
+    return createCache({ key: "secure-audit-log", prepend: true })
   }, [])
 
   const theme = useMemo(() => {
@@ -101,7 +101,7 @@ export default function SecureAuditLog() {
       documentationLink="https://pangea.cloud/docs/audit"
       tickleLink="https://pangea.cloud/docs/api/audit/"
       componentTitle="Secure Audit Log Component Example"
-      componentDescription="A pre-built, customizable component for viewing files and sharing them between users."
+      componentDescription="A pre-built, customizable component to embed an audit trail into your app."
       matches={matches}
     >
       <CacheProvider value={cache}>
