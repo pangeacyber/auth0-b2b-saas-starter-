@@ -1,3 +1,5 @@
+"use client"
+
 import Link from "next/link"
 
 import { Button } from "@/components/ui/button"
@@ -10,6 +12,20 @@ import {
   CardTitle,
 } from "@/components/ui/card"
 import { PageHeader } from "@/components/page-header"
+import { useLayoutEffect, useRef, useState } from "react";
+
+function useWindowSize() {
+  const [size, setSize] = useState([0, 0]);
+  useLayoutEffect(() => {
+    function updateSize() {
+      setSize([window.innerWidth, window.innerHeight]);
+    }
+    window.addEventListener('resize', updateSize);
+    updateSize();
+    return () => window.removeEventListener('resize', updateSize);
+  }, []);
+  return size;
+}
 
 interface PangeaPageProps {
   serviceName: string
@@ -20,7 +36,6 @@ interface PangeaPageProps {
   tickleLink: string
   componentTitle: string
   componentDescription: string
-  matches?: boolean
   footer?: React.ReactNode
   overrideCard?: React.ReactNode
   children?: React.ReactNode
@@ -35,15 +50,18 @@ export const PangeaPage = ({
   tickleLink,
   componentTitle,
   componentDescription,
-  matches,
   footer,
   overrideCard,
   children,
 }: PangeaPageProps) => {
+  const ref = useRef<HTMLDivElement>(null);
+  useWindowSize();
+
   return (
     <div
       className="space-y-2"
       style={{
+        width: "100%",
         // @ts-ignore
         ".Pangea-Flyout-Container": {
           backgroundColor: "hsl(var(--foreground))!important",
@@ -84,17 +102,14 @@ export const PangeaPage = ({
             <CardDescription>{componentDescription}</CardDescription>
           </CardHeader>
           <CardContent>
-            <div
-              style={
-                matches !== undefined
-                  ? {
-                      width: `calc(100vw - ${matches ? "350px" : "100px"})`,
-                      maxWidth: "100%",
-                    }
-                  : {}
-              }
-            >
-              {children}
+            <div ref={ref} style={{ width: "100%" }}>
+              <div
+                style={{
+                  width: `${ref.current?.clientWidth ?? 0}px`,
+                }}
+              >
+                {children}
+              </div>
             </div>
           </CardContent>
           <CardFooter className="flex justify-end">{footer}</CardFooter>

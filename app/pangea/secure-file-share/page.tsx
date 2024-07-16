@@ -1,7 +1,7 @@
 "use client"
 
 import dayjs from "dayjs";
-import { useEffect, useMemo, useState } from "react"
+import { useMemo } from "react"
 import createCache from "@emotion/cache"
 import { CacheProvider } from "@emotion/react"
 import ScopedCssBaseline from "@mui/material/ScopedCssBaseline"
@@ -13,14 +13,6 @@ import { StoreCallbackHandler, THEME_OPTIONS } from "@/lib/pangea-utils"
 import { PangeaPage } from "../pangea-page"
 
 export default function SecureFileShare() {
-  const [matches, setMatches] = useState(true)
-
-  useEffect(() => {
-    window
-      .matchMedia("(min-width: 1050px)")
-      .addEventListener("change", (e) => setMatches(e.matches))
-  }, [])
-
   const cache = useMemo(() => {
     return createCache({ key: "secure-file-share", prepend: true })
   }, [])
@@ -84,7 +76,6 @@ export default function SecureFileShare() {
       tickleLink="https://pangea.cloud/docs/api/share/"
       componentTitle="Secure Share Component Example"
       componentDescription="A pre-built, customizable component for viewing files and sharing them between users."
-      matches={matches}
     >
       <CacheProvider value={cache}>
         <ThemeProvider theme={theme}>

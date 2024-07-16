@@ -1,6 +1,6 @@
 "use client"
 
-import { useEffect, useMemo, useState } from "react"
+import { useMemo } from "react"
 import Link from "next/link"
 import createCache from "@emotion/cache"
 import { CacheProvider } from "@emotion/react"
@@ -64,13 +64,6 @@ const FIELD_CUSTOMIZATIONS: Partial<Record<EventFields, Partial<GridColDef>>> = 
 }
 
 export default function SecureAuditLog() {
-  const [matches, setMatches] = useState(true)
-  useEffect(() => {
-    window
-      .matchMedia("(min-width: 1050px)")
-      .addEventListener("change", (e) => setMatches(e.matches))
-  }, [])
-
   const cache = useMemo(() => {
     return createCache({ key: "secure-audit-log", prepend: true })
   }, [])
@@ -125,7 +118,6 @@ export default function SecureAuditLog() {
       tickleLink="https://pangea.cloud/docs/api/audit/"
       componentTitle="Secure Audit Log Component Example"
       componentDescription="A pre-built, customizable component to embed an audit trail into your app."
-      matches={matches}
     >
       <CacheProvider value={cache}>
         <ThemeProvider theme={theme}>
