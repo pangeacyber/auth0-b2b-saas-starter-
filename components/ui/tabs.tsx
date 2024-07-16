@@ -34,7 +34,7 @@ export const Tabs = ({
 
   const tabContent = tabs.map(({ title, content }, i) => (
     <div
-      className={`${i != index && "hidden"} rounded-lg bg-gray-100 p-4 dark:bg-gray-800`}
+      className={`${i != index && "hidden"} rounded-lg bg-gray-50 p-4 dark:bg-gray-800`}
       key={`tabcontent-${title}-${i}`}
       role="tabpanel"
       aria-labelledby={`${title}-tab`}
