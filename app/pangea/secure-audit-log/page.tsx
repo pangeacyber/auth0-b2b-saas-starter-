@@ -5,7 +5,8 @@ import Link from "next/link"
 import createCache from "@emotion/cache"
 import { CacheProvider } from "@emotion/react"
 import ScopedCssBaseline from "@mui/material/ScopedCssBaseline"
-import { createTheme, ThemeProvider } from "@mui/material/styles"
+import { createTheme, ThemeProvider } from "@mui/material/styles";
+import { GridColDef } from "@mui/x-data-grid";
 import { Audit, AuditLogViewer } from "@pangeacyber/react-mui-audit-log-viewer"
 
 import { THEME_OPTIONS } from "@/lib/pangea-utils"
@@ -53,6 +54,13 @@ const onFetchRoot =
     const { result } = await resp.json()
     return result
   }
+
+type EventFields = "description";
+const FIELD_CUSTOMIZATIONS: Partial<Record<EventFields, Partial<GridColDef>>> = {
+  description: {
+    minWidth: 350,
+  }
+}
 
 export default function SecureAuditLog() {
   const [matches, setMatches] = useState(true)
@@ -360,6 +368,7 @@ export default function SecureAuditLog() {
                           client_signable: true,
                           tamper_proofing: true,
                       }}
+                      fields={FIELD_CUSTOMIZATIONS}
                     />
                   ),
                 },
