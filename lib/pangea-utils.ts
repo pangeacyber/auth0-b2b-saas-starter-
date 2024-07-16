@@ -155,32 +155,37 @@ export const THEME_OPTIONS = {
       "MuiGrid": {
         "styleOverrides": {
           "root": {
+            ".pretty-json-container": {
+                ".object-key": {
+                    "color": "hsl(var(--foreground))!important"
+                },
+            },
             ".MuiDataGrid-root": {
               ".MuiDataGrid-columnHeaders": {
                 "backgroundColor": "hsl(var(--field))"
               },
               ".MuiDataGrid-row.Mui-selected": {
-                "backgroundColor": "hsl(var(--accent))",
+                "backgroundColor": "hsl(var(--card))",
                 ".PangeaDataGrid-Pinned-Right": {
-                  "backgroundColor": "hsl(var(--accent))"
+                  "backgroundColor": "hsl(var(--card))"
                 },
                 ":hover": {
-                  "backgroundColor": "hsl(var(--accent))",
+                  "backgroundColor": "hsl(var(--card))",
                   ".PangeaDataGrid-Pinned-Right": {
-                    "backgroundColor": "hsl(var(--accent))"
+                    "backgroundColor": "hsl(var(--card))"
                   }
                 }
               },
               ".MuiDataGrid-row": {
                 ":hover": {
-                  "backgroundColor": "hsl(var(--accent))",
+                  "backgroundColor": "hsl(var(--card))",
                   ".PangeaDataGrid-Pinned-Right": {
-                    "backgroundColor": "hsl(var(--accent))"
+                    "backgroundColor": "hsl(var(--card))"
                   }
                 }
               },
               ".PangeaDataGrid-ExpansionRow, .PangeaDataGrid-Chip": {
-                "backgroundColor": "hsl(var(--accent))"
+                "backgroundColor": "hsl(var(--card))"
               }
             }
           }
