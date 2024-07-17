@@ -158,11 +158,15 @@ for it in the [secure audit log](https://console.pangea.cloud/service/audit) set
 
 ![service activity example](./docs/pangea-service-activity.png)
 
+Now, you'll now need to enable Pangea's [Vault Service](https://console.pangea.cloud/service/vault) if it's not already enabled, and create a token that only has access to vault. Make sure your service token (created previously) is stored in vault, move it to vault using the [tokens edit page](https://console.pangea.cloud/project/tokens)
+and checking the `Store Token In Vault` box. Get that token's vault identifier (prefixed `pvi_`) from the `Vault Secrets & Keys` section under the folder called `Service Tokens`.
+
 All you need to do is add the following environment variables to your app:
 
 ```
 PANGEA_DOMAIN=<domain from your pangea account eg. aws.us.pangea.cloud>
-PANGEA_TOKEN=<token with access to all 3 services>
+PANGEA_TOKEN=<token with access to vault>
+PANGEA_SERVICE_TOKEN_ID=<service token identifier prefixed pvi_>
 NEXT_PUBLIC_PANGEA_AUDIT_AUTH0_CONFIG_ID=<audit config ID for audit log streaming>
 NEXT_PUBLIC_PANGEA_AUDIT_SERVICES_CONFIG_ID=<audit config ID for service activity>
 ```
