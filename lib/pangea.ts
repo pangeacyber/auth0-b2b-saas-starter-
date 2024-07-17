@@ -436,6 +436,7 @@ export class SecureShareClient extends PangeaClient {
   }
 
   async sendLink(request: ObjectStore.ShareSendRequest): Promise<Response> {
+    request = structuredClone(request)
     if (!this.isScoped()) {
       return this.request("/v1beta/share/link/send", request)
     }
@@ -458,6 +459,7 @@ export class SecureShareClient extends PangeaClient {
         }
       )
     }
+    request.sender_email = this.email!
     return this.request("/v1beta/share/link/send", request)
   }
 
