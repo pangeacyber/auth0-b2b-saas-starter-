@@ -5,8 +5,8 @@ import Link from "next/link"
 import createCache from "@emotion/cache"
 import { CacheProvider } from "@emotion/react"
 import ScopedCssBaseline from "@mui/material/ScopedCssBaseline"
-import { createTheme, ThemeProvider } from "@mui/material/styles";
-import { GridColDef } from "@mui/x-data-grid";
+import { createTheme, ThemeProvider } from "@mui/material/styles"
+import { GridColDef } from "@mui/x-data-grid"
 import { Audit, AuditLogViewer } from "@pangeacyber/react-mui-audit-log-viewer"
 
 import { THEME_OPTIONS } from "@/lib/pangea-utils"
@@ -42,26 +42,26 @@ const onPageChange =
     return result
   }
 
-const onFetchRoot =
-  (configId?: string) => async (req: Audit.RootRequest) => {
-    const resp = await fetch("/api/pangea/audit", {
-      method: "POST",
-      body: JSON.stringify({
-        path: "/v1/root",
-        config_id: configId,
-        ...req,
-      }),
-    })
-    const { result } = await resp.json()
-    return result
-  }
-
-type EventFields = "description";
-const FIELD_CUSTOMIZATIONS: Partial<Record<EventFields, Partial<GridColDef>>> = {
-  description: {
-    minWidth: 350,
-  }
+const onFetchRoot = (configId?: string) => async (req: Audit.RootRequest) => {
+  const resp = await fetch("/api/pangea/audit", {
+    method: "POST",
+    body: JSON.stringify({
+      path: "/v1/root",
+      config_id: configId,
+      ...req,
+    }),
+  })
+  const { result } = await resp.json()
+  return result
 }
+
+type EventFields = "description"
+const FIELD_CUSTOMIZATIONS: Partial<Record<EventFields, Partial<GridColDef>>> =
+  {
+    description: {
+      minWidth: 350,
+    },
+  }
 
 export default function SecureAuditLog() {
   const cache = useMemo(() => {
@@ -142,224 +142,232 @@ export default function SecureAuditLog() {
                       verificationOptions={{
                         onFetchRoot: onFetchRoot(
                           process.env.NEXT_PUBLIC_PANGEA_AUDIT_AUTH0_CONFIG_ID
-                        )
+                        ),
                       }}
                       schema={{
-                          fields: [
-                            {
-                              id: "type",
-                              name: "Type",
-                              size: 32766,
-                              type: "string",
-                              redact: false,
-                              required: false,
-                              description: "Type of the event.",
-                              ui_default_visible: true,
-                            },
-                            {
-                              id: "description",
-                              name: "Description",
-                              size: 32766,
-                              type: "string",
-                              redact: false,
-                              required: false,
-                              description: "Description of the event.",
-                              ui_default_visible: true,
-                            },
-                            {
-                              id: "date",
-                              name: "Date",
-                              size: 128,
-                              type: "datetime",
-                              redact: false,
-                              required: false,
-                              description:
-                                "This is the time stamp generated at the time the log was created.",
-                              ui_default_visible: true,
-                            },
-                            {
-                              id: "connection",
-                              name: "Connection",
-                              size: 32766,
-                              type: "string",
-                              redact: false,
-                              required: false,
-                              description:
-                                "Connection that triggered the event.",
-                              ui_default_visible: true,
-                            },
-                            {
-                              id: "client_name",
-                              name: "Application",
-                              size: 128,
-                              type: "string",
-                              redact: false,
-                              required: false,
-                              description:
-                                "The Name of the client that triggered the event.",
-                              ui_default_visible: true,
-                            },
-                            {
-                              id: "ip",
-                              name: "IP",
-                              size: 128,
-                              type: "string",
-                              redact: false,
-                              required: false,
-                              description: "The IP that triggered the event.",
-                              ui_default_visible: false,
-                            },
-                            {
-                              id: "hostname",
-                              name: "Hostname",
-                              size: 128,
-                              type: "string",
-                              redact: false,
-                              required: false,
-                              description: "Hostname that triggered the event.",
-                              ui_default_visible: false,
-                            },
-                            {
-                              id: "client_id",
-                              name: "Client ID",
-                              size: 128,
-                              type: "string",
-                              redact: false,
-                              required: false,
-                              description:
-                                "The ID of the client that triggered the event.",
-                              ui_default_visible: false,
-                            },
-                            {
-                              id: "user_id",
-                              name: "User ID",
-                              size: 128,
-                              type: "string",
-                              redact: false,
-                              required: false,
-                              description:
-                                "ID of the user that triggered the event.",
-                              ui_default_visible: false,
-                            },
-                            {
-                              id: "user_name",
-                              name: "User Name",
-                              size: 128,
-                              type: "string",
-                              redact: false,
-                              required: false,
-                              description:
-                                "Name of the user that triggered the event.",
-                              ui_default_visible: false,
-                            },
-                            {
-                              id: "user_agent",
-                              name: "User Agent",
-                              size: 32766,
-                              type: "string",
-                              redact: false,
-                              required: false,
-                              description:
-                                "Description of the agent that triggered the event.",
-                              ui_default_visible: false,
-                            },
-                            {
-                              id: "connection_id",
-                              name: "Connection ID",
-                              size: 128,
-                              type: "string",
-                              redact: false,
-                              required: false,
-                              description:
-                                "ID of the connection that triggered the event.",
-                              ui_default_visible: false,
-                            },
-                            {
-                              id: "scope",
-                              name: "Scope",
-                              size: 32766,
-                              type: "string",
-                              redact: false,
-                              required: false,
-                              description: "Scope of the event.",
-                              ui_default_visible: false,
-                            },
-                            {
-                              id: "audience",
-                              name: "Audience",
-                              size: 128,
-                              type: "string",
-                              redact: false,
-                              required: false,
-                              description: "Audience of the event.",
-                              ui_default_visible: false,
-                            },
-                            {
-                              id: "strategy",
-                              name: "Strategy",
-                              size: 128,
-                              type: "string",
-                              redact: false,
-                              required: false,
-                              description: "Strategy of the event.",
-                              ui_default_visible: false,
-                            },
-                            {
-                              id: "strategy_type",
-                              name: "Strategy Type",
-                              size: 128,
-                              type: "string",
-                              redact: false,
-                              required: false,
-                              description: "Strategy type of the event.",
-                              ui_default_visible: false,
-                            },
-                            {
-                              id: "details",
-                              name: "Details",
-                              size: 32766,
-                              type: "string",
-                              redact: false,
-                              required: false,
-                              description:
-                                "Extra details of the event. JSON formatted.",
-                              ui_default_visible: false,
-                            },
-                            {
-                              id: "event_details",
-                              name: "Event Details",
-                              size: 32766,
-                              type: "string",
-                              redact: false,
-                              required: false,
-                              description:
-                                "Schema of the event. JSON formatted.",
-                              ui_default_visible: false,
-                            },
-                            {
-                              id: "unexpected_fields",
-                              name: "Unexpected Fields",
-                              size: 32766,
-                              type: "string-unindexed",
-                              redact: false,
-                              required: false,
-                              description: "Unexptected fields found in event.",
-                              ui_default_visible: false,
-                            },
-                            {
-                              id: "validation_errors",
-                              name: "Validation Errors",
-                              size: 32766,
-                              type: "string-unindexed",
-                              redact: false,
-                              required: false,
-                              description:
-                                "Validation errors of some fields in the schema.",
-                              ui_default_visible: false,
-                            },
-                          ],
-                          client_signable: true,
-                          tamper_proofing: true,
+                        fields: [
+                          {
+                            id: "date",
+                            name: "Date",
+                            size: 128,
+                            type: "datetime",
+                            redact: false,
+                            required: false,
+                            description:
+                              "This is the time stamp generated at the time the log was created.",
+                            ui_default_visible: true,
+                          },
+                          {
+                            id: "type_description",
+                            name: "Type",
+                            size: 32766,
+                            type: "string",
+                            redact: false,
+                            required: false,
+                            description: "Human readable type for the event",
+                            ui_default_visible: true,
+                          },
+                          {
+                            id: "description",
+                            name: "Description",
+                            size: 32766,
+                            type: "string",
+                            redact: false,
+                            required: false,
+                            description: "Description of the event.",
+                            ui_default_visible: true,
+                          },
+                          {
+                            id: "connection",
+                            name: "Connection",
+                            size: 32766,
+                            type: "string",
+                            redact: false,
+                            required: false,
+                            description: "Connection that triggered the event.",
+                            ui_default_visible: true,
+                          },
+                          {
+                            id: "client_name",
+                            name: "Application",
+                            size: 128,
+                            type: "string",
+                            redact: false,
+                            required: false,
+                            description:
+                              "The Name of the client that triggered the event.",
+                            ui_default_visible: true,
+                          },
+                          {
+                            id: "ip",
+                            name: "IP",
+                            size: 128,
+                            type: "string",
+                            redact: false,
+                            required: false,
+                            description: "The IP that triggered the event.",
+                            ui_default_visible: false,
+                          },
+                          {
+                            id: "hostname",
+                            name: "Hostname",
+                            size: 128,
+                            type: "string",
+                            redact: false,
+                            required: false,
+                            description: "Hostname that triggered the event.",
+                            ui_default_visible: false,
+                          },
+                          {
+                            id: "client_id",
+                            name: "Client ID",
+                            size: 128,
+                            type: "string",
+                            redact: false,
+                            required: false,
+                            description:
+                              "The ID of the client that triggered the event.",
+                            ui_default_visible: false,
+                          },
+                          {
+                            id: "user_id",
+                            name: "User ID",
+                            size: 128,
+                            type: "string",
+                            redact: false,
+                            required: false,
+                            description:
+                              "ID of the user that triggered the event.",
+                            ui_default_visible: false,
+                          },
+                          {
+                            id: "user_name",
+                            name: "User Name",
+                            size: 128,
+                            type: "string",
+                            redact: false,
+                            required: false,
+                            description:
+                              "Name of the user that triggered the event.",
+                            ui_default_visible: false,
+                          },
+                          {
+                            id: "user_agent",
+                            name: "User Agent",
+                            size: 32766,
+                            type: "string",
+                            redact: false,
+                            required: false,
+                            description:
+                              "Description of the agent that triggered the event.",
+                            ui_default_visible: false,
+                          },
+                          {
+                            id: "connection_id",
+                            name: "Connection ID",
+                            size: 128,
+                            type: "string",
+                            redact: false,
+                            required: false,
+                            description:
+                              "ID of the connection that triggered the event.",
+                            ui_default_visible: false,
+                          },
+                          {
+                            id: "scope",
+                            name: "Scope",
+                            size: 32766,
+                            type: "string",
+                            redact: false,
+                            required: false,
+                            description: "Scope of the event.",
+                            ui_default_visible: false,
+                          },
+                          {
+                            id: "audience",
+                            name: "Audience",
+                            size: 128,
+                            type: "string",
+                            redact: false,
+                            required: false,
+                            description: "Audience of the event.",
+                            ui_default_visible: false,
+                          },
+                          {
+                            id: "strategy",
+                            name: "Strategy",
+                            size: 128,
+                            type: "string",
+                            redact: false,
+                            required: false,
+                            description: "Strategy of the event.",
+                            ui_default_visible: false,
+                          },
+                          {
+                            id: "strategy_type",
+                            name: "Strategy Type",
+                            size: 128,
+                            type: "string",
+                            redact: false,
+                            required: false,
+                            description: "Strategy type of the event.",
+                            ui_default_visible: false,
+                          },
+                          {
+                            id: "details",
+                            name: "Details",
+                            size: 32766,
+                            type: "string",
+                            redact: false,
+                            required: false,
+                            description:
+                              "Extra details of the event. JSON formatted.",
+                            ui_default_visible: false,
+                          },
+                          {
+                            id: "event_details",
+                            name: "Event Details",
+                            size: 32766,
+                            type: "string",
+                            redact: false,
+                            required: false,
+                            description: "Schema of the event. JSON formatted.",
+                            ui_default_visible: false,
+                          },
+                          {
+                            id: "unexpected_fields",
+                            name: "Unexpected Fields",
+                            size: 32766,
+                            type: "string-unindexed",
+                            redact: false,
+                            required: false,
+                            description: "Unexptected fields found in event.",
+                            ui_default_visible: false,
+                          },
+                          {
+                            id: "validation_errors",
+                            name: "Validation Errors",
+                            size: 32766,
+                            type: "string-unindexed",
+                            redact: false,
+                            required: false,
+                            description:
+                              "Validation errors of some fields in the schema.",
+                            ui_default_visible: false,
+                          },
+                          {
+                            id: "type",
+                            name: "Type Code",
+                            size: 32766,
+                            type: "string",
+                            redact: false,
+                            required: false,
+                            description: "Type of the event.",
+                            ui_default_visible: false,
+                          },
+                        ],
+                        client_signable: true,
+                        tamper_proofing: true,
                       }}
                       fields={FIELD_CUSTOMIZATIONS}
                     />
@@ -378,7 +386,7 @@ export default function SecureAuditLog() {
                       verificationOptions={{
                         onFetchRoot: onFetchRoot(
                           process.env.NEXT_PUBLIC_PANGEA_AUDIT_AUTH0_CONFIG_ID
-                        )
+                        ),
                       }}
                       schema={SERVICE_TO_SERVICE_AUDIT_SCHEMA}
                     />
