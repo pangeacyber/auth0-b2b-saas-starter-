@@ -1,6 +1,6 @@
 import type { ObjectStore } from "@pangeacyber/react-mui-store-file-viewer"
 
-export class PangeaClient {
+export class PangeaHTTPClient {
   resolve202s: boolean
   retries: number
   service: string
@@ -14,9 +14,9 @@ export class PangeaClient {
     exponentialBackoff: number = 0.25,
     protocol: string = "https"
   ) {
+    this.service = service
     this.resolve202s = resolveIssue
     this.retries = retries
-    this.service = service
     this.proto = protocol
     this.exponentialBackoff = exponentialBackoff * 1000
   }
@@ -25,9 +25,11 @@ export class PangeaClient {
     if (!path.startsWith("/")) {
       path = "/" + path
     }
+
+    const token = await this.getToken()
     const resp = await fetch(this.makeUrl(path), {
       method: "POST",
-      headers: { Authorization: `Bearer ${process.env.PANGEA_TOKEN}` },
+      headers: { Authorization: `Bearer ${token}` },
       body: body instanceof FormData ? body : JSON.stringify(body),
     })
 
@@ -40,12 +42,17 @@ export class PangeaClient {
     return resp
   }
 
+  async getToken(): Promise<string> {
+    throw new Error("Not implemented!")
+  }
+
   async resolve202(location: string) {
+    const token = await this.getToken()
     let retries = this.retries
     while (retries > 0) {
       const resp = await fetch(location, {
         method: "GET",
-        headers: { Authorization: `Bearer ${process.env.PANGEA_TOKEN}` },
+        headers: { Authorization: `Bearer ${token}` },
       })
 
       if (resp.status !== 202) {
@@ -65,14 +72,84 @@ export class PangeaClient {
   }
 }
 
-export class RedactClient extends PangeaClient {
+export class VaultClient extends PangeaHTTPClient {
+  tokenCache: Map<string, string>
   constructor(
     resolveIssue: boolean = true,
     retries: number = 5,
     exponentialBackoff: number = 0.25,
     protocol: string = "https"
   ) {
-    super("redact", resolveIssue, retries, exponentialBackoff, protocol)
+    super(
+      "vault",
+      resolveIssue,
+      retries,
+      exponentialBackoff,
+      protocol
+    )
+    this.tokenCache = new Map<string, string>()
+  }
+
+  async getToken(): Promise<string> {
+      return process.env.PANGEA_TOKEN!
+  }
+
+  async fetchServiceToken(serviceTokenId: string): Promise<string> {
+    const cachedToken = this.tokenCache.get(serviceTokenId)
+    if (cachedToken) {
+      return cachedToken
+    }
+
+    const resp = await this.request("/v1/get", { id: serviceTokenId })
+    if (resp.status != 200) {
+      const text = await resp.text()
+      throw new Error(`Failed to fetch vault token: ${text}`)
+    }
+
+    const { result: { current_version: { secret: token } } } = await resp.json()
+    this.tokenCache.set(serviceTokenId, token)
+    return token
+  }
+}
+
+export const defaultVaultClient = new VaultClient()
+
+export class PangeaClient extends PangeaHTTPClient {
+  vaultClient: VaultClient
+
+  constructor(
+    serviceName: string,
+    vaultClient?: VaultClient,
+    resolveIssue: boolean = true,
+    retries: number = 5,
+    exponentialBackoff: number = 0.25,
+    protocol: string = "https"
+  ) {
+    super(
+      serviceName,
+      resolveIssue,
+      retries,
+      exponentialBackoff,
+      protocol
+    )
+    this.vaultClient = vaultClient ? vaultClient : defaultVaultClient
+  }
+
+  async getToken(): Promise<string> {
+    return await this.vaultClient.fetchServiceToken(process.env.PANGEA_SERVICE_TOKEN_ID!)
+  }
+}
+
+
+export class RedactClient extends PangeaClient {
+  constructor(
+    vaultClient?: VaultClient,
+    resolveIssue: boolean = true,
+    retries: number = 5,
+    exponentialBackoff: number = 0.25,
+    protocol: string = "https"
+  ) {
+    super("redact", vaultClient, resolveIssue, retries, exponentialBackoff, protocol)
   }
 
   async text(text: string): Promise<string> {
@@ -90,12 +167,13 @@ export class RedactClient extends PangeaClient {
 
 export class AuditClient extends PangeaClient {
   constructor(
+    vaultClient?: VaultClient,
     resolveIssue: boolean = true,
     retries: number = 5,
     exponentialBackoff: number = 0.25,
     protocol: string = "https"
   ) {
-    super("audit", resolveIssue, retries, exponentialBackoff, protocol)
+    super("audit", vaultClient, resolveIssue, retries, exponentialBackoff, protocol)
   }
 
   async proxy(path: string, body: any) {
@@ -108,17 +186,18 @@ export class SecureShareClient extends PangeaClient {
   email?: string
 
   constructor(
+    vaultClient?: VaultClient,
     resolveIssue: boolean = true,
     retries: number = 5,
     exponentialBackoff: number = 0.25,
     protocol: string = "https"
   ) {
-    super("share", resolveIssue, retries, exponentialBackoff, protocol)
+    super("share", vaultClient, resolveIssue, retries, exponentialBackoff, protocol)
   }
 
   scopedClient(orgId: string, email?: string) {
     const clone = Object.create(Object.getPrototypeOf(this))
-    Object.assign(clone, this);
+    Object.assign(clone, this)
     clone.orgId = orgId
     clone.email = email
     return clone
@@ -229,7 +308,7 @@ export class SecureShareClient extends PangeaClient {
 
   async listObjects(request: ObjectStore.ListRequest): Promise<Response> {
     const objs = await this.listObjs(request)
-    if(objs instanceof Response) {
+    if (objs instanceof Response) {
       return objs
     }
 
@@ -239,7 +318,7 @@ export class SecureShareClient extends PangeaClient {
   }
 
   async listObjs(
-    request: ObjectStore.ListRequest,
+    request: ObjectStore.ListRequest
   ): Promise<PangeaResponse<ListObjectsResponse> | Response> {
     if (!this.isScoped()) {
       const data = await this.request("/v1beta/list", request)
@@ -253,7 +332,11 @@ export class SecureShareClient extends PangeaClient {
       filter.folder = scopedPath
     }
 
-    if (filter.folder && !filter.folder.startsWith(scopedPath) && filter.folder != scopedPath) {
+    if (
+      filter.folder &&
+      !filter.folder.startsWith(scopedPath) &&
+      filter.folder != scopedPath
+    ) {
       filter.folder = scopedPath.slice(0, -1) + filter.folder
     }
 
