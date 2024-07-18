@@ -1,7 +1,7 @@
 import { Audit } from "@pangeacyber/react-mui-audit-log-viewer"
 import { GridColDef } from "@mui/x-data-grid";
 
-type ServiceEventFields = "status" | "service_name" | "action" | "service_feature"
+type ServiceEventFields = "status" | "service_name" | "action" | "service_feature" | "message"
 export const SERVICE_TO_SERVICE_FIELD_CUSTOMIZATIONS: Partial<Record<ServiceEventFields, Partial<GridColDef>>> =
   {
     status: {
@@ -17,8 +17,11 @@ export const SERVICE_TO_SERVICE_FIELD_CUSTOMIZATIONS: Partial<Record<ServiceEven
       width: 130
     },
     service_feature: {
-      minWidth: 110,
-      width: 110
+      minWidth: 140,
+      width: 140
+    },
+    message: {
+        minWidth: 350
     }
 };
 
