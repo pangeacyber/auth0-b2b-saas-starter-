@@ -13,8 +13,8 @@ export const ACTIVITY_FIELD_CUSTOMIZATIONS: Partial<Record<ActivityEventFields, 
       width: 120
     },
     action: {
-        minWidth: 130,
-        width: 130
+      minWidth: 130,
+      width: 130
     },
     service_feature: {
       minWidth: 110,
