@@ -144,6 +144,33 @@ To learn more about Auth0, take a look at the following resources:
 - [Understand how Auth0 Organizations Work](https://auth0.com/docs/manage-users/organizations/organizations-overview) - learn about how this project achieves multi-tenancy
 - [Customize](https://auth0.com/docs/customize) - learn how to brand and internationalize all Auth0 interactions with your end-users
 
+## Pangea Services
+
+This template includes a set of security examples brought to you by [Pangea](https://pangea.cloud). In order to make use of these services, you'll need to enable the services by following [this guide](https://pangea.cloud/docs/getting-started/) to get started.
+You'll need to enable [secure audit log](https://pangea.cloud/docs/audit/), [secure share](https://pangea.cloud/docs/share/), and [redact](https://pangea.cloud/docs/redact/).
+
+You'll need to [create a token](https://pangea.cloud/docs/admin-guide/tokens/) as specified in [the onboarding guide](https://pangea.cloud/docs/getting-started/).
+
+You can also setup auth0 log streaming to pangea's secure audit log service by following [this guide](https://pangea.cloud/blog/add-audit-log-streaming-to-auth0-in-2-mins/) or heading over to the [auth0 marketplace](https://marketplace.auth0.com/integrations/pangea-log-streaming).
+
+You can setup the secure audit log component to use the [pangea service activity](https://pangea.cloud/docs/admin-guide/organizations/activity) audit log by getting the service config ID 
+for it in the [secure audit log](https://console.pangea.cloud/service/audit) settings page as shown below:
+
+![service activity example](./docs/pangea-service-activity.png)
+
+Now, you'll now need to enable Pangea's [Vault Service](https://console.pangea.cloud/service/vault) if it's not already enabled, and create a token that only has access to vault. Make sure your service token (created previously) is stored in vault, move it to vault using the [tokens edit page](https://console.pangea.cloud/project/tokens)
+and checking the `Store Token In Vault` box. Get that token's vault identifier (prefixed `pvi_`) from the `Vault Secrets & Keys` section under the folder called `Service Tokens`.
+
+All you need to do is add the following environment variables to your app:
+
+```
+PANGEA_DOMAIN=<domain from your pangea account eg. aws.us.pangea.cloud>
+PANGEA_TOKEN=<token with access to vault>
+PANGEA_SERVICE_TOKEN_ID=<service token identifier prefixed pvi_>
+NEXT_PUBLIC_PANGEA_AUDIT_AUTH0_CONFIG_ID=<audit config ID for audit log streaming>
+NEXT_PUBLIC_PANGEA_AUDIT_SERVICES_CONFIG_ID=<audit config ID for service activity>
+```
+
 ## Contributing
 
 See [CONTRIBUTING](./CONTRIBUTING.md) for information.
