@@ -21,7 +21,7 @@ export const SERVICE_TO_SERVICE_FIELD_CUSTOMIZATIONS: Partial<Record<ServiceEven
       width: 140
     },
     message: {
-        minWidth: 350
+      minWidth: 500
     }
 };
 
