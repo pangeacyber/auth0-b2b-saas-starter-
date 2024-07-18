@@ -13,7 +13,7 @@ import { THEME_OPTIONS } from "@/lib/pangea/utils"
 import { Tabs } from "@/components/ui/tabs"
 
 import { PangeaPage } from "../pangea-page"
-import { SERVICE_TO_SERVICE_AUDIT_SCHEMA } from "./activity_schema"
+import { SERVICE_TO_SERVICE_FIELD_CUSTOMIZATIONS, SERVICE_TO_SERVICE_AUDIT_SCHEMA } from "./activity_schema"
 
 const onSearch = (configId?: string) => async (req: Audit.SearchRequest) => {
   const resp = await fetch("/api/pangea/audit", {
@@ -389,6 +389,7 @@ export default function SecureAuditLog() {
                         ),
                       }}
                       schema={SERVICE_TO_SERVICE_AUDIT_SCHEMA}
+                      fields={SERVICE_TO_SERVICE_FIELD_CUSTOMIZATIONS}
                     />
                   ),
                 },
