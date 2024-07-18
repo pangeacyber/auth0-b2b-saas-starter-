@@ -1,4 +1,26 @@
 import { Audit } from "@pangeacyber/react-mui-audit-log-viewer"
+import { GridColDef } from "@mui/x-data-grid";
+
+type ActivityEventFields = "status" | "service_name" | "action" | "service_feature"
+export const ACTIVITY_FIELD_CUSTOMIZATIONS: Partial<Record<ActivityEventFields, Partial<GridColDef>>> =
+  {
+    status: {
+      minWidth: 80,
+      width: 80
+    },
+    service_name: {
+      minWidth: 120,
+      width: 120
+    },
+    action: {
+        minWidth: 130,
+        width: 130
+    },
+    service_feature: {
+      minWidth: 110,
+      width: 110
+    }
+};
 
 export const SERVICE_TO_SERVICE_AUDIT_SCHEMA: Audit.Schema = {
   fields: [
