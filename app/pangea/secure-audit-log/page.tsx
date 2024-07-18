@@ -55,12 +55,16 @@ const onFetchRoot = (configId?: string) => async (req: Audit.RootRequest) => {
   return result
 }
 
-type EventFields = "description"
+type EventFields = "description" | "client_name";
 const FIELD_CUSTOMIZATIONS: Partial<Record<EventFields, Partial<GridColDef>>> =
   {
     description: {
       minWidth: 350,
     },
+    client_name: {
+      minWidth: 200,
+      width: 200,
+    }
   }
 
 export default function SecureAuditLog() {
