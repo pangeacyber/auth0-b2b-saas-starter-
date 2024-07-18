@@ -1,186 +1,11 @@
 import type { ObjectStore } from "@pangeacyber/react-mui-store-file-viewer"
 
-export class PangeaHTTPClient {
-  resolve202s: boolean
-  retries: number
-  service: string
-  proto: string
-  exponentialBackoff: number
+import { PangeaClient, PangeaResponse } from "./client"
+import type { VaultClient } from "./vault"
 
-  constructor(
-    service: string,
-    resolveIssue: boolean = true,
-    retries: number = 5,
-    exponentialBackoff: number = 0.25,
-    protocol: string = "https"
-  ) {
-    this.service = service
-    this.resolve202s = resolveIssue
-    this.retries = retries
-    this.proto = protocol
-    this.exponentialBackoff = exponentialBackoff * 1000
-  }
-
-  async request(path: string, body: any): Promise<Response> {
-    if (!path.startsWith("/")) {
-      path = "/" + path
-    }
-
-    const token = await this.getToken()
-    const resp = await fetch(this.makeUrl(path), {
-      method: "POST",
-      headers: { Authorization: `Bearer ${token}` },
-      body: body instanceof FormData ? body : JSON.stringify(body),
-    })
-
-    if (this.resolve202s && resp.status === 202) {
-      const {
-        result: { location },
-      } = await resp.json()
-      return this.resolve202(location)
-    }
-    return resp
-  }
-
-  async getToken(): Promise<string> {
-    throw new Error("Not implemented!")
-  }
-
-  async resolve202(location: string) {
-    const token = await this.getToken()
-    let retries = this.retries
-    while (retries > 0) {
-      const resp = await fetch(location, {
-        method: "GET",
-        headers: { Authorization: `Bearer ${token}` },
-      })
-
-      if (resp.status !== 202) {
-        return resp
-      }
-      const backoff = (this.retries - retries) * this.exponentialBackoff
-      await sleep(backoff)
-      retries -= 1
-    }
-
-    throw new Error("Could not resolve 202 within the given retry window")
-  }
-
-  makeUrl(path: string): string {
-    const url = `${this.proto}://${this.service}.${process.env.PANGEA_DOMAIN}${path}`
-    return url
-  }
-}
-
-export class VaultClient extends PangeaHTTPClient {
-  tokenCache: Map<string, string>
-  constructor(
-    resolveIssue: boolean = true,
-    retries: number = 5,
-    exponentialBackoff: number = 0.25,
-    protocol: string = "https"
-  ) {
-    super(
-      "vault",
-      resolveIssue,
-      retries,
-      exponentialBackoff,
-      protocol
-    )
-    this.tokenCache = new Map<string, string>()
-  }
-
-  async getToken(): Promise<string> {
-      return process.env.PANGEA_TOKEN!
-  }
-
-  async fetchServiceToken(serviceTokenId: string): Promise<string> {
-    const cachedToken = this.tokenCache.get(serviceTokenId)
-    if (cachedToken) {
-      return cachedToken
-    }
-
-    const resp = await this.request("/v1/get", { id: serviceTokenId })
-    if (resp.status != 200) {
-      const text = await resp.text()
-      throw new Error(`Failed to fetch vault token: ${text}`)
-    }
-
-    const { result: { current_version: { secret: token } } } = await resp.json()
-    this.tokenCache.set(serviceTokenId, token)
-    return token
-  }
-}
-
-export const defaultVaultClient = new VaultClient()
-
-export class PangeaClient extends PangeaHTTPClient {
-  vaultClient: VaultClient
-
-  constructor(
-    serviceName: string,
-    vaultClient?: VaultClient,
-    resolveIssue: boolean = true,
-    retries: number = 5,
-    exponentialBackoff: number = 0.25,
-    protocol: string = "https"
-  ) {
-    super(
-      serviceName,
-      resolveIssue,
-      retries,
-      exponentialBackoff,
-      protocol
-    )
-    this.vaultClient = vaultClient ? vaultClient : defaultVaultClient
-  }
-
-  async getToken(): Promise<string> {
-    return await this.vaultClient.fetchServiceToken(process.env.PANGEA_SERVICE_TOKEN_ID!)
-  }
-}
-
-
-export class RedactClient extends PangeaClient {
-  constructor(
-    vaultClient?: VaultClient,
-    resolveIssue: boolean = true,
-    retries: number = 5,
-    exponentialBackoff: number = 0.25,
-    protocol: string = "https"
-  ) {
-    super("redact", vaultClient, resolveIssue, retries, exponentialBackoff, protocol)
-  }
-
-  async text(text: string): Promise<string> {
-    const resp = await this.request("/v1/redact", { text })
-    if (resp.status != 200) {
-      console.error(await resp.text())
-      throw new Error("Failed to call redact service")
-    }
-    const {
-      result: { redacted_text },
-    } = await resp.json()
-    return redacted_text
-  }
-}
-
-export class AuditClient extends PangeaClient {
-  constructor(
-    vaultClient?: VaultClient,
-    resolveIssue: boolean = true,
-    retries: number = 5,
-    exponentialBackoff: number = 0.25,
-    protocol: string = "https"
-  ) {
-    super("audit", vaultClient, resolveIssue, retries, exponentialBackoff, protocol)
-  }
-
-  async proxy(path: string, body: any) {
-    return this.request(path, body)
-  }
-}
-
+/**
+ * Makes API calls to Pangea's secure share service.
+ */
 export class SecureShareClient extends PangeaClient {
   orgId?: string
   email?: string
@@ -192,10 +17,21 @@ export class SecureShareClient extends PangeaClient {
     exponentialBackoff: number = 0.25,
     protocol: string = "https"
   ) {
-    super("share", vaultClient, resolveIssue, retries, exponentialBackoff, protocol)
+    super(
+      "share",
+      vaultClient,
+      resolveIssue,
+      retries,
+      exponentialBackoff,
+      protocol
+    )
   }
 
-  scopedClient(orgId: string, email?: string) {
+  /**
+   * Creates a scoped client which normalizes all folder paths
+   * for in-app tenancy
+   */
+  scopedClient(orgId: string, email?: string): this {
     const clone = Object.create(Object.getPrototypeOf(this))
     Object.assign(clone, this)
     clone.orgId = orgId
@@ -203,6 +39,10 @@ export class SecureShareClient extends PangeaClient {
     return clone
   }
 
+  /**
+   * Gets a folder or object's metadata, or downloads a folder or object
+   * if a transfer method is specified.
+   */
   async getObject(request: ObjectStore.GetRequest): Promise<Response> {
     if (!this.isScoped()) {
       return this.request("/v1beta/get", request)
@@ -217,16 +57,21 @@ export class SecureShareClient extends PangeaClient {
     return this.request("/v1beta/get", request)
   }
 
+  /**
+   * Helper function that fetches an object's metadata, different from getObj
+   * in that it returns the object for use within a route function instead
+   * of a response passed to the secure share component.
+   */
   async getObj(
     id?: string,
     path?: string
-  ): Promise<PangeaResponse<GetResponse> | Response> {
+  ): Promise<PangeaResponse<ObjectStore.GetResponse> | Response> {
     const resp = await this.request("/v1beta/get", { id, path })
     if (resp.status !== 200) {
       return resp
     }
 
-    const data: PangeaResponse<GetResponse> = await resp.json()
+    const data: PangeaResponse<ObjectStore.GetResponse> = await resp.json()
     if (data.status.toLowerCase() !== "success") {
       return resp
     }
@@ -264,6 +109,9 @@ export class SecureShareClient extends PangeaClient {
     return data
   }
 
+  /**
+   * Uploads a file to secure share
+   */
   async upload(uploadForm: FormData): Promise<Response> {
     if (!this.isScoped()) {
       return this.request("/v1beta/put", uploadForm)
@@ -275,10 +123,17 @@ export class SecureShareClient extends PangeaClient {
     const scopedPath = this.scopedPath()
     if (data.path) {
       data.path = `${scopedPath}${data.path}/${data.name}`
+      // Name is deleted since path will be provided for the scoped client
+      delete data.name
+    } else if (data.parent_id) {
+      const parent = await this.getObj(data.parent_id)
+      if (parent instanceof Response) {
+        return parent
+      }
     } else {
       data.path = `${scopedPath}${data.name}`
+      delete data.name
     }
-    delete data.name
 
     uploadForm.set(
       "request",
@@ -293,7 +148,13 @@ export class SecureShareClient extends PangeaClient {
     })
   }
 
-  async getShareLinks(ids: string[]): Promise<PangeaResponse<LinksResponse>> {
+  /**
+   * Fetches all share links for a list of object IDs, an object can be a folder or
+   * file.
+   */
+  async getShareLinks(
+    ids: string[]
+  ): Promise<PangeaResponse<ObjectStore.SharesObjectResponse>> {
     const body = {
       filter: { id__in: ids } as any,
     }
@@ -306,6 +167,9 @@ export class SecureShareClient extends PangeaClient {
     return resp.json()
   }
 
+  /**
+   * Lists all objects within a given path or folder
+   */
   async listObjects(request: ObjectStore.ListRequest): Promise<Response> {
     const objs = await this.listObjs(request)
     if (objs instanceof Response) {
@@ -317,9 +181,14 @@ export class SecureShareClient extends PangeaClient {
     })
   }
 
+  /**
+   * Lists all objects within a given path or folder, this function is different from
+   * listObjects in that it returns the list response value instead of the proxied
+   * response which would be used by the secure share component directly.
+   */
   async listObjs(
     request: ObjectStore.ListRequest
-  ): Promise<PangeaResponse<ListObjectsResponse> | Response> {
+  ): Promise<PangeaResponse<ObjectStore.ListResponse> | Response> {
     if (!this.isScoped()) {
       const data = await this.request("/v1beta/list", request)
       return data.json()
@@ -327,14 +196,13 @@ export class SecureShareClient extends PangeaClient {
     const scopedPath = this.scopedPath()
 
     const filter = request.filter || {}
-
-    if (!filter.id && !filter.parent_id && !filter.folder) {
-      filter.folder = scopedPath
+    if (!filter.id && !filter.parent_id && !filter.folder && !filter.id__in) {
+      filter.folder = scopedPath.slice(0, -1)
     }
 
     if (
       filter.folder &&
-      !filter.folder.startsWith(scopedPath) &&
+      !filter.folder.startsWith(scopedPath.slice(0, -1)) &&
       filter.folder != scopedPath
     ) {
       filter.folder = scopedPath.slice(0, -1) + filter.folder
@@ -357,13 +225,14 @@ export class SecureShareClient extends PangeaClient {
     if (!request.filter) {
       request.filter = filter
     }
+
     const resp = await this.request("/v1beta/list", request)
     if (resp.status !== 200) {
       return resp
     }
-    const data = (await resp.json()) as PangeaResponse<ListObjectsResponse>
+    const data = (await resp.json()) as PangeaResponse<ObjectStore.ListResponse>
     data.result.objects = data.result.objects.map(
-      (obj: Partial<ObjectResponse>) => {
+      (obj: ObjectStore.ObjectResponse) => {
         obj.folder = (obj.folder as string).replace(scopedPath.slice(0, -1), "")
         return obj
       }
@@ -371,6 +240,9 @@ export class SecureShareClient extends PangeaClient {
     return data
   }
 
+  /**
+   * Deletes a folder or file
+   */
   async deleteObject(request: ObjectStore.DeleteRequest): Promise<Response> {
     if (!this.isScoped()) {
       return this.request("/v1beta/delete", request)
@@ -382,6 +254,9 @@ export class SecureShareClient extends PangeaClient {
     return this.request("/v1beta/delete", request)
   }
 
+  /**
+   * Updates the metadata of a stored object (folder | file)
+   */
   async updateObject(request: ObjectStore.UpdateRequest): Promise<Response> {
     if (!this.isScoped()) {
       return this.request("/v1beta/update", request)
@@ -394,6 +269,9 @@ export class SecureShareClient extends PangeaClient {
     return this.request("/v1beta/update", request)
   }
 
+  /**
+   * Creates a folder on a given path
+   */
   async createFolder(
     request: Partial<ObjectStore.FolderCreateRequest>
   ): Promise<Response> {
@@ -416,6 +294,9 @@ export class SecureShareClient extends PangeaClient {
     return this.request("/v1beta/folder/create", request)
   }
 
+  /**
+   * Gets a specific share link
+   */
   async getLink(request: ObjectStore.ShareGetRequest): Promise<Response> {
     const resp = await this.request("/v1beta/share/link/get", request)
     if (!this.isScoped()) {
@@ -443,6 +324,9 @@ export class SecureShareClient extends PangeaClient {
     })
   }
 
+  /**
+   * Lists links for a given object
+   */
   async listLinks(request: ObjectStore.ShareListRequest): Promise<Response> {
     request = { ...request }
     if (this.isScoped()) {
@@ -454,6 +338,9 @@ export class SecureShareClient extends PangeaClient {
     return this.request("/v1beta/share/link/list", request)
   }
 
+  /**
+   * Deletes secure share link(s)
+   */
   async deleteLink(request: ObjectStore.ShareDeleteRequest): Promise<Response> {
     if (!this.isScoped()) {
       return this.request("/v1/share/link/delete", request)
@@ -476,6 +363,9 @@ export class SecureShareClient extends PangeaClient {
     return this.request("/v1beta/share/link/delete", request)
   }
 
+  /**
+   * Creates a secure share link
+   */
   async createLink(request: ShareCreateRequest): Promise<Response> {
     request = structuredClone(request)
     if (!this.isScoped()) {
@@ -518,6 +408,10 @@ export class SecureShareClient extends PangeaClient {
     return this.request("/v1beta/share/link/create", request)
   }
 
+  /**
+   * Sends a secure share link using the link-defined transfer method
+   * eg. email, sms, etc.
+   */
   async sendLink(request: ObjectStore.ShareSendRequest): Promise<Response> {
     request = structuredClone(request)
     if (!this.isScoped()) {
@@ -546,9 +440,7 @@ export class SecureShareClient extends PangeaClient {
     return this.request("/v1beta/share/link/send", request)
   }
 
-  async proxy(path: string, body: any) {
-    return this.request(path, body)
-  }
+  // Private
 
   isScoped(): boolean {
     return Boolean(this.email || this.orgId)
@@ -590,69 +482,7 @@ export class SecureShareClient extends PangeaClient {
   }
 }
 
-function sleep(ms: number) {
-  return new Promise((resolve) => setTimeout(resolve, ms))
-}
-
-enum ObjectType {
-  Folder = "folder",
-  File = "file",
-}
-
-interface ObjectResponse {
-  id: string
-  name: string
-  owner?: string
-  created_at: string
-  updated_at: string
-  parent_id?: string
-  folder?: string
-  path?: string
-  billable_size: number
-  size: number
-  md5_hex?: string
-  sha256_hex?: string
-  sha512_hex?: string
-  metadata?: Record<string, any>
-  tags?: string[]
-  type: string | ObjectType
-  dest_url?: string
-
-  metadata_protected?: {
-    format?: string
-    mimetype?: string
-
-    "vault-password-algorithm"?: string
-  }
-
-  // Internal from flattenning metadata_protected
-  format?: string
-  mimetype?: string
-  "vault-password-algorithm"?: string
-}
-
-interface PangeaResponse<T = any> {
-  request_id: string
-  status: string
-  summary: string
-  result: T
-}
-
-interface GetResponse {
-  dest_url?: string
-  object: ObjectResponse
-}
-
-interface LinksResponse {
-  share_link_objects: {
-    id: string
-  }[]
-}
-
-interface ListObjectsResponse {
-  objects: Partial<ObjectResponse>[]
-  last?: string
-}
+// Private
 
 interface LinkWithTags extends ObjectStore.SingleShareCreateRequest {
   tags: string[]

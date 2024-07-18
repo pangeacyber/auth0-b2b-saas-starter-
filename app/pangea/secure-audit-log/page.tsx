@@ -9,7 +9,7 @@ import { createTheme, ThemeProvider } from "@mui/material/styles"
 import { GridColDef } from "@mui/x-data-grid"
 import { Audit, AuditLogViewer } from "@pangeacyber/react-mui-audit-log-viewer"
 
-import { THEME_OPTIONS } from "@/lib/pangea-utils"
+import { THEME_OPTIONS } from "@/lib/pangea/utils"
 import { Tabs } from "@/components/ui/tabs"
 
 import { PangeaPage } from "../pangea-page"

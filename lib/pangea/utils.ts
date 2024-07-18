@@ -1,5 +1,16 @@
-import { interFont } from "./font"
+import { interFont } from "../font"
 
+/**
+ * a promisified sleep function for HTTP backoffs
+ */
+export function sleep(ms: number) {
+  return new Promise((resolve) => setTimeout(resolve, ms))
+}
+
+/**
+ * Theme used by MUI components to conform to the established styles in the template
+ * where parameterization is possible.
+ */
 export const THEME_OPTIONS = {
   spacing: 8,
   typography: {
@@ -288,6 +299,27 @@ export const THEME_OPTIONS = {
   },
 }
 
+/**
+ * API Proxy for use by the secure share component
+ */
+export const StoreCallbackHandler = {
+  get: storeProxyFetch("/v1beta/get"),
+  list: storeProxyFetch("/v1beta/list"),
+  share: {
+    list: storeProxyFetch("/v1beta/share/link/list"),
+    get: storeProxyFetch("/v1beta/share/link/get"),
+    delete: storeProxyFetch("/v1beta/share/link/delete"),
+    create: storeProxyFetch("/v1beta/share/link/create"),
+    send: storeProxyFetch("/v1beta/share/link/send"),
+  },
+  delete: storeProxyFetch("/v1beta/delete"),
+  update: storeProxyFetch("/v1beta/update"),
+  upload: upload,
+  folderCreate: storeProxyFetch("/v1beta/folder/create"),
+}
+
+// Private
+
 function storeProxyFetch(path: string) {
   return async function (req: Record<any, any>) {
     const resp = await fetch(`/api/pangea/share`, {
@@ -317,20 +349,4 @@ async function upload(data: FormData, contentType: string) {
     credentials: "same-origin",
   })
   return await resp.json()
-}
-
-export const StoreCallbackHandler = {
-  get: storeProxyFetch("/v1beta/get"),
-  list: storeProxyFetch("/v1beta/list"),
-  share: {
-    list: storeProxyFetch("/v1beta/share/link/list"),
-    get: storeProxyFetch("/v1beta/share/link/get"),
-    delete: storeProxyFetch("/v1beta/share/link/delete"),
-    create: storeProxyFetch("/v1beta/share/link/create"),
-    send: storeProxyFetch("/v1beta/share/link/send"),
-  },
-  delete: storeProxyFetch("/v1beta/delete"),
-  update: storeProxyFetch("/v1beta/update"),
-  upload: upload,
-  folderCreate: storeProxyFetch("/v1beta/folder/create"),
 }
