@@ -389,7 +389,7 @@ export default function SecureAuditLog() {
                       )}
                       verificationOptions={{
                         onFetchRoot: onFetchRoot(
-                          process.env.NEXT_PUBLIC_PANGEA_AUDIT_AUTH0_CONFIG_ID
+                          process.env.NEXT_PUBLIC_PANGEA_AUDIT_SERVICES_CONFIG_ID
                         ),
                       }}
                       schema={SERVICE_TO_SERVICE_AUDIT_SCHEMA}
