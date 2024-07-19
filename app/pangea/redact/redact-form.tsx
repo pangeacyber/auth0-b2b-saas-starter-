@@ -55,7 +55,7 @@ export function RedactForm({ organization }: Props) {
             <Textarea
               id="targetText"
               name="targetText"
-              defaultValue={`An example of simple text redaction:
+              defaultValue={`An example of simple text replacement redaction:
 My email is admin@pangea-cyber-1.com
 
 An example of format preserving encryption:
@@ -64,7 +64,7 @@ My phone number is (555)-555-5555
 An example of salted hash:
 My SSN is 123-54-7890
 
-An example of prefix:
+An example of partial masking:
 My Credit Card number is 4917-4845-8989-7107`}
               rows={12}
             />
