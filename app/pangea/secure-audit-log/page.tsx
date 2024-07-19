@@ -15,18 +15,26 @@ import { Tabs } from "@/components/ui/tabs"
 import { PangeaPage } from "../pangea-page"
 import { SERVICE_TO_SERVICE_AUDIT_SCHEMA } from "./activity_schema"
 
-const onSearch = (configId?: string) => async (req: Audit.SearchRequest) => {
-  const resp = await fetch("/api/pangea/audit", {
-    method: "POST",
-    body: JSON.stringify({
-      path: "/v1/search",
-      config_id: configId,
-      ...req,
-    }),
-  })
-  const { result } = await resp.json()
-  return result
-}
+const onSearch =
+  (configId?: string, restrictions?: Record<string, string[]>) =>
+  async (req: Audit.SearchRequest) => {
+    if (restrictions) {
+      req = structuredClone(req)
+      const restricted = req.search_restriction || ({} as any)
+      req.search_restriction = { ...restricted, ...restrictions }
+    }
+
+    const resp = await fetch("/api/pangea/audit", {
+      method: "POST",
+      body: JSON.stringify({
+        path: "/v1/search",
+        config_id: configId,
+        ...req,
+      }),
+    })
+    const { result } = await resp.json()
+    return result
+  }
 
 const onPageChange =
   (configId?: string) => async (req: Audit.ResultRequest) => {
@@ -431,7 +439,10 @@ export default function SecureAuditLog() {
                   content: (
                     <AuditLogViewer
                       onSearch={onSearch(
-                        process.env.NEXT_PUBLIC_PANGEA_AUDIT_SERVICES_CONFIG_ID
+                        process.env.NEXT_PUBLIC_PANGEA_AUDIT_SERVICES_CONFIG_ID,
+                        {
+                          service_name: ["Secure Share"],
+                        }
                       )}
                       onPageChange={onPageChange(
                         process.env.NEXT_PUBLIC_PANGEA_AUDIT_SERVICES_CONFIG_ID
