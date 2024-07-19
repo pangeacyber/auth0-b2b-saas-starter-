@@ -13,7 +13,7 @@ import { THEME_OPTIONS } from "@/lib/pangea/utils"
 import { Tabs } from "@/components/ui/tabs"
 
 import { PangeaPage } from "../pangea-page"
-import { SERVICE_TO_SERVICE_AUDIT_SCHEMA } from "./activity_schema"
+import { SERVICE_TO_SERVICE_FIELD_CUSTOMIZATIONS, SERVICE_TO_SERVICE_AUDIT_SCHEMA } from "./activity_schema"
 
 const onSearch =
   (configId?: string, restrictions?: Record<string, string[]>) =>
@@ -63,12 +63,16 @@ const onFetchRoot = (configId?: string) => async (req: Audit.RootRequest) => {
   return result
 }
 
-type EventFields = "description"
+type EventFields = "description" | "client_name";
 const FIELD_CUSTOMIZATIONS: Partial<Record<EventFields, Partial<GridColDef>>> =
   {
     description: {
       minWidth: 350,
     },
+    client_name: {
+      minWidth: 200,
+      width: 200,
+    }
   }
 
 export default function SecureAuditLog() {
@@ -449,10 +453,11 @@ export default function SecureAuditLog() {
                       )}
                       verificationOptions={{
                         onFetchRoot: onFetchRoot(
-                          process.env.NEXT_PUBLIC_PANGEA_AUDIT_AUTH0_CONFIG_ID
+                          process.env.NEXT_PUBLIC_PANGEA_AUDIT_SERVICES_CONFIG_ID
                         ),
                       }}
                       schema={SERVICE_TO_SERVICE_AUDIT_SCHEMA}
+                      fields={SERVICE_TO_SERVICE_FIELD_CUSTOMIZATIONS}
                     />
                   ),
                 },
