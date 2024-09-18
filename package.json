@@ -1,6 +1,7 @@
 {
   "name": "auth0-b2b-saas-starter",
   "version": "1.0.0",
+  "private": true,
   "scripts": {
     "dev": "next dev --turbo",
     "build": "next build",
