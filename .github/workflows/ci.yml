@@ -3,7 +3,7 @@ name: CI
 on:
   push:
     branches:
-      - main
+      - auth0-pangea
 
   pull_request:
     types:
@@ -21,7 +21,7 @@ permissions:
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.event.number || github.ref }}
-  cancel-in-progress: ${{ github.ref_name != 'main' }}
+  cancel-in-progress: ${{ github.ref_name != 'auth0-pangea' }}
 
 env:
   NEXT_TELEMETRY_DISABLED: 1
