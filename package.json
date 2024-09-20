@@ -52,7 +52,7 @@
     "@ianvs/prettier-plugin-sort-imports": "^4.3.1",
     "@mui/x-data-grid": "7.17.0",
     "@types/node": "^20.16.5",
-    "@types/react": "^18.3.6",
+    "@types/react": "^18.3.7",
     "@types/react-dom": "^18.3.0",
     "eslint": "^8.57.1",
     "eslint-config-next": "14.2.12",
