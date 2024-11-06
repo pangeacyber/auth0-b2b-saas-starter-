@@ -51,7 +51,7 @@
   "devDependencies": {
     "@ianvs/prettier-plugin-sort-imports": "^4.3.1",
     "@mui/x-data-grid": "7.22.1",
-    "@types/node": "^22.8.6",
+    "@types/node": "^22.8.7",
     "@types/react": "^18.3.12",
     "@types/react-dom": "^18.3.1",
     "eslint": "^8.57.1",
