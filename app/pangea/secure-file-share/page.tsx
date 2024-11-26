@@ -6,9 +6,9 @@ import { CacheProvider } from "@emotion/react"
 import ScopedCssBaseline from "@mui/material/ScopedCssBaseline"
 import { createTheme, ThemeProvider } from "@mui/material/styles"
 import {
-  StoreConfigurations,
-  StoreFileViewer,
-} from "@pangeacyber/react-mui-store-file-viewer"
+  ShareConfigurations,
+  ShareFileViewer,
+} from "@pangeacyber/react-mui-share-file-viewer"
 import dayjs from "dayjs"
 
 import { StoreCallbackHandler, THEME_OPTIONS } from "@/lib/pangea/utils"
@@ -39,7 +39,7 @@ export default function SecureFileShare() {
         maxAccessCount: 7,
         maxDate: dayDate,
       },
-    } as StoreConfigurations
+    } as ShareConfigurations
   }, [])
 
   return (
@@ -88,7 +88,7 @@ export default function SecureFileShare() {
               height: "100%",
             }}
           >
-            <StoreFileViewer
+            <ShareFileViewer
               configurations={configurations}
               apiRef={StoreCallbackHandler}
             />

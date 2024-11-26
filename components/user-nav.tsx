@@ -52,6 +52,7 @@ export async function UserNav() {
           <Link href="/dashboard/account/profile">Profile</Link>
         </DropdownMenuItem>
         <DropdownMenuItem asChild>
+          {/* eslint-disable-next-line @next/next/no-html-link-for-pages */}
           <a href="/api/auth/logout">Log Out</a>
         </DropdownMenuItem>
       </DropdownMenuContent>

@@ -14,6 +14,7 @@ export default async function Home() {
   return (
     <div className="container relative sm:grid h-screen flex-col items-center justify-center md:grid lg:max-w-none lg:grid-cols-2 lg:px-0">
       {session ? (
+        // eslint-disable-next-line @next/next/no-html-link-for-pages
         <a
           href="/api/auth/logout"
           className={cn(
@@ -24,6 +25,7 @@ export default async function Home() {
           Logout
         </a>
       ) : (
+        // eslint-disable-next-line @next/next/no-html-link-for-pages
         <a
           href="/api/auth/login"
           className={cn(

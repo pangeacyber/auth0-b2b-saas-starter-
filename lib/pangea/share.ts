@@ -1,4 +1,4 @@
-import type { ObjectStore } from "@pangeacyber/react-mui-store-file-viewer"
+import type { ObjectStore } from "@pangeacyber/react-mui-share-file-viewer"
 
 import { PangeaClient, PangeaResponse } from "./client"
 import type { VaultClient } from "./vault"
