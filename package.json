@@ -14,7 +14,7 @@
     "@auth0/nextjs-auth0": "^3.5.0",
     "@emotion/react": "^11.13.5",
     "@emotion/styled": "^11.13.5",
-    "@mui/material": "6.1.9",
+    "@mui/material": "6.1.10",
     "@pangeacyber/react-mui-audit-log-viewer": "1.0.5",
     "@pangeacyber/react-mui-share-file-viewer": "1.0.2",
     "@radix-ui/react-alert-dialog": "^1.1.2",
